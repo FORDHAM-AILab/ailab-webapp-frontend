@@ -13,15 +13,21 @@
     "react": "17.0.2",
     "react-bootstrap": "^2.0.0-beta.6",
     "react-chartjs-2": "3.0.3",
+    "react-csv": "^2.2.2",
     "react-dom": "17.0.2",
+    "react-icons": "^4.3.1",
     "react-notification-alert": "0.0.13",
     "react-notifications-component": "^3.1.0",
     "react-papaparse": "^3.18.2",
+    "react-pro-sidebar": "^0.7.1",
     "react-router": "5.2.0",
     "react-router-cache-route": "^1.12.1",
     "react-router-dom": "5.2.0",
     "react-scripts": "4.0.3",
-    "reactstrap": "8.9.0"
+    "react-select": "^5.2.2",
+    "react-stockcharts": "^0.7.8",
+    "reactstrap": "8.9.0",
+    "tsne-js": "^1.0.3"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -47,6 +53,7 @@
   },
   "devDependencies": {
     "gulp": "4.0.2",
-    "gulp-append-prepend": "1.0.9"
+    "gulp-append-prepend": "1.0.9",
+    "react-error-overlay": "^6.0.9"
   }
 }

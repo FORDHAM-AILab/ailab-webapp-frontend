@@ -29,11 +29,14 @@ import {
   CardTitle,
   Row,
   Col,
-  Table
+  Table,
+  NavLink,
+  Nav
 } from "reactstrap";
 // core components
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import { Link } from "react-router-dom";
 
 function Home() {
   const [top_gainers, setTopGainers] = useState();
@@ -60,62 +63,43 @@ function Home() {
     get_top_gainers_or_losers('losers')},[])
 
 
-  function TopGainersOrLosers(type, height) {
-    const style = {
-      maxHeight: `${height}px`,
-      maxWidth: `6in`,
-      overflowY: 'auto',
-      overflowX: 'auto'
-    };
-
-    if ((type === 'gainers') && (top_gainers != null)) {
-      return (
-        <div style={style}>
-          <DynamicTable bordered height={height} data={top_gainers}></DynamicTable>
-        </div>
-      )
-    }
-    else if ((type === 'losers') && (top_losers != null)){
-      return (
-        <div style={style}>
-          <DynamicTable bordered height={height} data={top_losers}></DynamicTable>
-        </div>
-      )
-    }
-  } 
-
 
   return (
     <>
     
       <div className="content">
         <Row>
-          <Col md="6">
+          <Col md="12">
             <Card>
               <CardHeader>
-                <CardTitle tag="h5">Top Gainers</CardTitle>
+                <CardTitle tag="h5">Welcome</CardTitle>
               </CardHeader>
               <CardBody>
-                {TopGainersOrLosers("gainers", 400, 200)}
-              </CardBody>
-            </Card>
-          </Col>
-          <Col md="6">
-            <Card>
-              <CardHeader>
-                <CardTitle tag="h5">Top Losers</CardTitle>
-              </CardHeader>
-              <CardBody>
-              {TopGainersOrLosers("losers", 400, 200)}
+                <p>
+                  FERMI stands for Financial Engineering and Risk Management Initiatives. It is meat to serve faculty and students for teaching and research in the following aspects:
+                  <br/>
+                  <br/>
+                  <li style={{"text-indent": 10}}>Scalable Computations</li>
+                  <li style={{"text-indent": 10}}>Scalable and User-friendly Data Analytics and Storage</li>
+                  <li style={{"text-indent": 10}}>Model playground and competitions</li>
+                  <br/>
+                  Want to collaborate? Please contact -- <br/> 
+                  GitHub <a href="https://github.com/SammyCui/ailab-webapp">link</a>
+                </p>
+                
               </CardBody>
             </Card>
           </Col>
         </Row>
-
         <Row>
-          <Col>
+          <Col md="12">
             <Card>
-            <CardTitle tag="h5">Market News</CardTitle>
+              <CardHeader>
+                <CardTitle tag="h5">Other Basic Infos</CardTitle>
+              </CardHeader>
+              <CardBody>
+                <p>Some other descriptions</p>
+              </CardBody>
             </Card>
           </Col>
         </Row>

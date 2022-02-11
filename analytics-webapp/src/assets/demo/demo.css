@@ -205,3 +205,7 @@
   outline: none;
   display: none;
 }
+
+#ok {
+  color: white
+}

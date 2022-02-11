@@ -17,14 +17,62 @@
 
 */
 import Home from "views/Home.js";
-import SentimentAnalysis from "views/Sentiment.js";
-import PortfolioAnalysis from "views/Portfolio.js";
-import StockAnalysis from "views/Stock.js";
-import OptionsAnalysis from "views/Options.js";
+import SentimentAnalysis from "views/Analytics/Sentiment.js";
+import PortfolioAnalysis from "views/Analytics/Portfolio.js";
+import StockAnalysis from "views/Analytics/Stock.js";
+import OptionsAnalysis from "views/Analytics/Options.js";
 import Settings from "views/Settings.js";
-import UserPage from "views/User.js";
+import Analysis from "views/Analytics/Analysis.js"
+import StockDataIntelligence from "views/DataIntelligence/DataStock.js"
+import DataDashboard  from "views/DataIntelligence/DataHome";
+import StockFullAnalytics from "views/Analytics/StockFullAnalytics";
+import CDSView from "views/DataIntelligence/CDS.js";
+import ResearchHome from "views/Research/Research.js";
+import DataInfoSample from "views/Data/DataInfoSample";
 
-
+var sidebar_routes = [  
+  {
+    path: "/home",
+    name: "Home",
+    //icon: "nc-icon nc-globe",
+    component: Home,
+    layout: "/admin"
+  },
+  { 
+    path: "/data",
+    name: "Data Intelligence",
+    //icon: "nc-icon nc-diamond",
+    layout: "/admin",
+    component: DataDashboard
+  },
+  { 
+    path: "/analysis",
+    name: "Analytics",
+    //icon: "nc-icon nc-diamond",
+    component: Analysis,
+    layout: "/admin"
+  },
+  { 
+    path: "/research",
+    name: "Research",
+    //icon: "nc-icon nc-diamond",
+    component: ResearchHome,
+    layout: "/admin"
+  },
+  { 
+    path: "/competitions",
+    name: "Competitions",
+    //icon: "nc-icon nc-diamond",
+    component: Analysis,
+    layout: "/admin"
+  },
+  {
+    path: "/settings",
+    name: "Settings",
+    //icon: "nc-icon nc-settings-gear-65",
+    component: Settings,
+    layout: "/admin"
+  },]
 
 var routes = [
   {
@@ -35,11 +83,33 @@ var routes = [
     layout: "/admin",
   },
   { 
+    path: "/data",
+    name: "Dashboard",
+    //icon: "nc-icon nc-diamond",
+    layout: "/admin",
+    component: DataDashboard
+  },
+  { 
+    path: "/data/data_warehouse/cds",
+    name: "CDS",
+    //icon: "nc-icon nc-diamond",
+    layout: "/admin",
+    component: CDSView
+  },
+
+  { 
+    path: "/analysis",
+    name: "Analytics",
+    //icon: "nc-icon nc-diamond",
+    component: Analysis,
+    layout: "/admin"
+  },
+  { 
     path: "/portfolio",
-    name: "Portfolio Analysis",
+    name: "Portfolio Analytics",
     //icon: "nc-icon nc-diamond",
     component: PortfolioAnalysis,
-    layout: "/admin",
+    layout: "/admin"
   },
 
   // {
@@ -51,31 +121,54 @@ var routes = [
   // },
   {
     path: "/stock",
-    name: "Stock Analysis",
+    name: "Stock Analytics",
     //icon: "nc-icon nc-tile-56",
     component: StockAnalysis,
     layout: "/admin",
   },
   {
-    path: "/options",
-    name: "Options Analysis",
-    //icon: "nc-icon nc-caps-small",
-    component: OptionsAnalysis,
+    path: "/stock/full_analytics",
+    name: "Detail Analytics",
+    //icon: "nc-icon nc-tile-56",
+    component: StockFullAnalytics,
     layout: "/admin",
   },
   {
+    path: "/data/sampledata",
+    name: "Dataset_name",
+    //icon: "nc-icon nc-tile-56",
+    component: DataInfoSample,
+    layout: "/admin",
+  },
+  
+  {
+    path: "/options",
+    name: "Options Analytics",
+    //icon: "nc-icon nc-caps-small",
+    component: OptionsAnalysis,
+    layout: "/admin"
+  },
+  {
     path: "/sentiment",
-    name: "Sentiment Analysis",
+    name: "Sentiment Analytics",
     //icon: "nc-icon nc-bell-55",
     component: SentimentAnalysis,
-    layout: "/admin",
+    layout: "/admin"
+  },
+  { 
+    path: "/research",
+    name: "Research",
+    //icon: "nc-icon nc-diamond",
+    component: ResearchHome,
+    layout: "/admin"
   },
   {
     path: "/settings",
     name: "Settings",
     //icon: "nc-icon nc-settings-gear-65",
     component: Settings,
-    layout: "/admin",
+    layout: "/admin"
   },
 ];
-export default routes;
+
+export {routes, sidebar_routes}

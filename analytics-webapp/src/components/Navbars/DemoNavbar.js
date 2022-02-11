@@ -35,8 +35,10 @@ import {
   InputGroupAddon,
   Input,
 } from "reactstrap";
-
-import routes from "routes.js";
+import { BsFillArrowLeftCircleFill } from "react-icons/bs";
+import {useHistory} from "react-router-dom"
+import {routes, sidebar_routes} from "routes.js";
+import Button from "@restart/ui/esm/Button";
 
 function Header(props) {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -89,6 +91,15 @@ function Header(props) {
       sidebarToggle.current.classList.toggle("toggled");
     }
   }, [location]);
+
+  const Back = () => {
+    const history = useHistory();
+    return (
+      <div style={{marginRight: 5}}>
+        <BsFillArrowLeftCircleFill onClick={history.goBack}></BsFillArrowLeftCircleFill>
+      </div>
+    )
+  }
   return (
     // add or remove classes depending if we are on full-screen-maps page or not
     <Navbar
@@ -119,7 +130,9 @@ function Header(props) {
               <span className="navbar-toggler-bar bar3" />
             </button>
           </div>
-          <NavbarBrand href="/">{getBrand()}</NavbarBrand>
+          <Back/>
+          <p>  </p>
+          <NavbarBrand>{getBrand()}</NavbarBrand>
         </div>
         <NavbarToggler onClick={toggle}>
           <span className="navbar-toggler-bar navbar-kebab" />

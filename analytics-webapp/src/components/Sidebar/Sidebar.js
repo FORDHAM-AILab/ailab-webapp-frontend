@@ -63,7 +63,7 @@ function Sidebar(props) {
         <Link to='/admin/home/'
           className="simple-text logo-normal"
         >
-          WebApp
+          FERMI
         </Link>
       </div>
       <div className="sidebar-wrapper" ref={sidebar}>

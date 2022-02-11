@@ -33,6 +33,7 @@ export default class DynamicTable extends React.Component {
       
       var items = this.props.data;
       var keys = this.getKeys();
+      console.log(typeof items)
       return items.map((row, index)=>{
         return <tr key={index}><RenderRow key={index} data={row} keys={keys}/></tr>
       })
@@ -57,6 +58,6 @@ export default class DynamicTable extends React.Component {
 
 const RenderRow = (props) =>{
   return props.keys.map((key, index)=>{
-    return <td key={props.data[key]}>{props.data[key]}</td>
+    return <td key={index}>{props.data[key]}</td>
   })
 }
