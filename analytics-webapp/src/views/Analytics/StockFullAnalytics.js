@@ -62,7 +62,7 @@ function StockFullAnalytics() {
       return data
     }
 
-    const response = fetch(`http://localhost:8888/data/load_single_hist_stock_price/${ticker}/2017-01-01/2020-02-02`)
+    const response = fetch(`http://localhost:8888/stock/load_single_hist_stock_price/${ticker}/2017-01-01/2020-02-02`)
     .then((response) => response.text())
     .then((data) => parseData(JSON.parse(JSON.parse(data)["result"])))
     return response

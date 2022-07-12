@@ -53,7 +53,7 @@ function DataDashboard() {
 
 
   function get_top_gainers_or_losers(type){
-    fetch(`http://localhost:8888/home/get_top_${type}/${time_range}`)
+    fetch(`http://localhost:8888/data/stock/get_top_${type}/${time_range}`)
     .then((response) => response.json())
     .then((responseData) => {
       if (type === 'gainers'){
@@ -140,7 +140,7 @@ function DataDashboard() {
             </NavItem>
             <NavItem>
                 <NavLink active={activeTab === '7'} to="#" onClick={()=> {toggletab('7');}} style={{color: 'black'}}>
-                    Data Warehouse
+                    Datasets
                 </NavLink>
             </NavItem>
         </Nav>
@@ -171,7 +171,7 @@ function DataDashboard() {
             <Row>
                 <Col md="12">
                     <Card>
-                        <CardHeader tag="h5">Analytical Datasets</CardHeader>
+                        <CardHeader tag="h5">Datasets</CardHeader>
                         <CardBody>
                             <Row >
                             <NavLink href="/admin/data/data_warehouse/cds">

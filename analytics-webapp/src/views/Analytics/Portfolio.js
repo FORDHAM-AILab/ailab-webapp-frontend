@@ -275,7 +275,7 @@ function PortfolioAnalysis() {
   }
 
   async function get_basic_info(data, weights) {
-    const response = await fetch('http://localhost:8888/portfolio_analysis/get_basic_info', {
+    const response = await fetch('http://localhost:8888/portfolio/get_basic_info', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -294,7 +294,7 @@ function PortfolioAnalysis() {
   }
 
   async function calc_valueatrisk(data, weights, var_level, var_iterations, var_alpha){
-    const result = fetch('http://localhost:8888/portfolio_analysis/valueatrisk', {
+    const result = fetch('http://localhost:8888/portfolio/valueatrisk', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -313,7 +313,7 @@ function PortfolioAnalysis() {
   }
   
   async function calc_sharpe_ratio(data, rf){
-    const response = await fetch('http://localhost:8888/portfolio_analysis/sharpe_ratio', {
+    const response = await fetch('http://localhost:8888/portfolio/sharpe_ratio', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -331,7 +331,7 @@ function PortfolioAnalysis() {
 
 
   async function calc_weights(){
-    const response = await fetch('http://localhost:8888/portfolio_analysis/weights_optimization', {
+    const response = await fetch('http://localhost:8888/portfolio/weights_optimization', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -397,12 +397,13 @@ function PortfolioAnalysis() {
         <Col md="12">
           <Card className="analysis">
             <CardHeader>
-              <CardTitle tag="h5">PCA Analysis(Clusters)</CardTitle>
+              <CardTitle tag="h5">PCA/ICA/NMF etc.</CardTitle>
               <p className="card-category">
                 Tickers: {tickers}
               </p>
             </CardHeader>
             <CardBody className="PCA">
+              Linear: PCA/ICA, Non-linear: UMAP, T-SNE, autoencoders...
             </CardBody>
           </Card>
         </Col>

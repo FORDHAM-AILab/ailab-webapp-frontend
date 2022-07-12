@@ -29,6 +29,10 @@ import StockFullAnalytics from "views/Analytics/StockFullAnalytics";
 import CDSView from "views/DataIntelligence/CDS.js";
 import ResearchHome from "views/Research/Research.js";
 import DataInfoSample from "views/Data/DataInfoSample";
+import ResearchInfoSample from "views/Research/SampleResearch";
+import User from "views/User";
+import ChallengeHome from "views/Challenges/ChallengeHome";
+import ChallengePM from "views/Challenges/ChallengePM";
 
 var sidebar_routes = [  
   {
@@ -60,10 +64,10 @@ var sidebar_routes = [
     layout: "/admin"
   },
   { 
-    path: "/competitions",
-    name: "Competitions",
+    path: "/challenges",
+    name: "Challenges",
     //icon: "nc-icon nc-diamond",
-    component: Analysis,
+    component: ChallengeHome,
     layout: "/admin"
   },
   {
@@ -162,6 +166,13 @@ var routes = [
     component: ResearchHome,
     layout: "/admin"
   },
+  { 
+    path: "/research/samplepage",
+    name: "Research name",
+    //icon: "nc-icon nc-diamond",
+    component: ResearchInfoSample,
+    layout: "/admin"
+  },
   {
     path: "/settings",
     name: "Settings",
@@ -169,6 +180,28 @@ var routes = [
     component: Settings,
     layout: "/admin"
   },
+  {
+    path: "/user",
+    name: "User",
+    //icon: "nc-icon nc-settings-gear-65",
+    component: User,
+    layout: "/admin"
+  },
+  {
+    path: "/challenges",
+    name: "Challenges",
+    //icon: "nc-icon nc-settings-gear-65",
+    component: ChallengeHome,
+    layout: "/admin"
+  },
+  {
+    path: "/challenges/challengepm",
+    name: "Portfolio Management Challenge",
+    //icon: "nc-icon nc-settings-gear-65",
+    component: ChallengePM,
+    layout: "/admin"
+  }
+  
 ];
 
 export {routes, sidebar_routes}

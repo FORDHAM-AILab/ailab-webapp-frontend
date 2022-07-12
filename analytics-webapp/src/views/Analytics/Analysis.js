@@ -61,6 +61,27 @@ function Analysis (){
                 </Col>
                 </CardBody>
             </Card>
+            <Card>
+                <CardHeader>
+                <CardTitle>
+                    <CardTitle tag="h4">Links</CardTitle>
+                </CardTitle>
+                </CardHeader>
+                <CardBody>
+                    <Col>
+                <Row>
+                <NavLink to="#">
+                    <li>JupyterHub</li>
+                </NavLink>
+                </Row>
+                <Row>
+                <NavLink to="#">
+                    <li>Zeppelin</li>
+                </NavLink>
+                </Row>
+                    </Col>
+                </CardBody>
+            </Card>
             </Col>
         </div>
     );

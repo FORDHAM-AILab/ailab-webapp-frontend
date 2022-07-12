@@ -52,16 +52,11 @@ function Sidebar(props) {
       data-color={props.bgColor}
       data-active-color={props.activeColor}
     >
-      <div className="logo">
-        <a
-          className="simple-text logo-mini"
-        >
-          <div className="logo-img">
-            <img src={logo} alt="react-logo" />
-          </div>
-        </a>
+      <div className="logo" style={{height:"52px"}}>
+
         <Link to='/admin/home/'
           className="simple-text logo-normal"
+          style={{textAlign: 'center'}}
         >
           FERMI
         </Link>

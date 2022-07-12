@@ -33,15 +33,15 @@ export default class DynamicTable extends React.Component {
       
       var items = this.props.data;
       var keys = this.getKeys();
-      console.log(typeof items)
       return items.map((row, index)=>{
         return <tr key={index}><RenderRow key={index} data={row} keys={keys}/></tr>
       })
     }
-    
-    render() {
+
+    dispTable = function(){
+      if ((this.props.data !== null) && (this.props.data !== undefined) && (this.props.data.length > 0)){
+        
         return (
-          <div>
             <Table>
             <thead>
               <tr>{this.getHeader()}</tr>
@@ -50,7 +50,17 @@ export default class DynamicTable extends React.Component {
               {this.getRowsData()}
             </tbody>
             </Table>
-          </div>
+          
+        )
+      }
+      else{
+        return (<div>No records</div>)
+      }
+    }
+    
+    render() {
+        return (
+          this.dispTable()
           
         );
     }

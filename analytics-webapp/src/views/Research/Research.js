@@ -33,7 +33,8 @@ import {
   Button,
   Nav,
   NavItem,
-  NavLink
+  NavLink,
+  Input
 } from "reactstrap";
 
 import Form from 'react-bootstrap/Form';
@@ -49,11 +50,29 @@ function ResearchHome() {
     <div className="content">
       <Row>
         <Col md="12">
+            <Card>
+              <CardHeader>
+              <CardTitle>
+                <CardTitle tag="h4">Search research</CardTitle>
+              </CardTitle>
+              </CardHeader>
+              <CardBody>
+                <Form>
+                  <Input>Search research</Input>
+                  <Button>Search</Button><br/>
+                </Form>
+                <Button>New Research</Button>
+              </CardBody>
+            </Card>
+          </Col>
+        </Row>
+      <Row>
+        <Col md="12">
           <Card>
               <CardHeader>By Faculty</CardHeader>
             <CardBody>
                 <li>
-                        <a href="#">Placeholder1</a>
+                        <a href="/admin/research/samplepage">Placeholder1</a>
                 </li>
                 <li>
                         <a href="#">Placeholder2</a>

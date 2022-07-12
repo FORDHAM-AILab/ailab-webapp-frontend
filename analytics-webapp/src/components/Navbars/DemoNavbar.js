@@ -16,6 +16,9 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
+
+// ref: https://github.com/kolitiri/fastapi-oidc-react/blob/master/react/apps/frontend/src/App.js
+
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
@@ -24,26 +27,32 @@ import {
   NavbarToggler,
   NavbarBrand,
   Nav,
-  NavItem,
   Dropdown,
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
+  NavItem,
   Container,
-  InputGroup,
-  InputGroupText,
-  InputGroupAddon,
-  Input,
 } from "reactstrap";
 import { BsFillArrowLeftCircleFill } from "react-icons/bs";
 import {useHistory} from "react-router-dom"
 import {routes, sidebar_routes} from "routes.js";
 import Button from "@restart/ui/esm/Button";
+import { useDispatch, useSelector } from "react-redux";
+import { users } from "reducers/cache_user";
+import { saveUser, clearUser } from "reducers/cache_user";
+import Cookies from 'js-cookie'
+
+
+//const UserInfoContext = React.createContext();
+
 
 function Header(props) {
   const [isOpen, setIsOpen] = React.useState(false);
   const [dropdownOpen, setDropdownOpen] = React.useState(false);
+  const [userLoggedIn, setUserStatus] = React.useState(false)
   const [color, setColor] = React.useState("transparent");
+  const [userInfo, setUserInfo] = React.useState(null);
   const sidebarToggle = React.useRef();
   const location = useLocation();
   const toggle = () => {
@@ -54,6 +63,140 @@ function Header(props) {
     }
     setIsOpen(!isOpen);
   };
+
+
+  const producerLoginRedirectEndpoint= 'http://localhost:8888/login-redirect';
+  const producerLoginEndpoint = 'http://localhost:8888/login/';
+  const producerLogoutEndpoint = 'http://localhost:8888/logout/';
+  const producerLoginCheckEndpoint = 'http://localhost:8888/user-session-status/';
+
+  const dispatch = useDispatch()
+  const user = useSelector(state => state.user)
+  
+  React.useEffect(() => {
+    authenticate();
+
+  }, [])
+
+  const setCookie = (cname, cvalue, exdays) => {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    var expires = "expires="+ d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+  }
+
+  const getCookie = (cname) => {
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for(var i = 0; i <ca.length; i++) {
+      var c = ca[i];
+      while (c.charAt(0) === ' ') {
+        c = c.substring(1);
+      }
+      if (c.indexOf(name) === 0) {
+        return c.substring(name.length, c.length);
+      }
+    }
+    return "";
+  }
+
+  const authenticate = () => {
+    var authToken = (window.location.search.match(/authToken=([^&]+)/) || [])[1]
+    window.history.pushState('object', document.title, "/");
+
+    if (authToken) {
+      // Try to get an access token from the server
+      getAccessToken(authToken)
+    } else {
+      // Check user is logged in
+      checkUserSessionStatus()
+    }
+  }
+
+  const getAccessToken = (authToken) => {
+    const request = {
+      method: 'GET',
+      headers: {
+        "Authorization": "Bearer " + authToken
+      },
+      credentials: 'include'
+    }
+
+    fetch(producerLoginEndpoint, request)
+    .then(response => {
+      // Check user is logged in
+      console.log(response)
+      checkUserSessionStatus()
+    })
+    .then(data => {})
+    .catch(err => {})
+  }
+
+  const checkUserSessionStatus = () => {
+    const request = {
+      method: 'GET',
+      credentials: 'include'
+    }
+
+    fetch(producerLoginCheckEndpoint, request)
+    .then(response => {
+      if (response.ok){
+        return response.json()
+      }
+      else{
+        console.log('clear user')
+        setUserStatus(false)
+        dispatch(clearUser())
+      }
+      })
+    .then(data => {
+      setUserStatus(data['userLoggedIn']);
+      setUserInfo(data['userInfo'])
+      if (data['userLoggedIn']){
+        dispatch(saveUser(data['userInfo']))
+      }
+      else{
+        console.log('clear user')
+        dispatch(clearUser())
+      }
+      
+    })
+    .catch(err => {})
+  }
+
+  const logout = () => {
+    const request = {
+      method: 'GET',
+      credentials: 'include'
+    }
+
+    fetch(producerLogoutEndpoint, request)
+    .then(response => response.json())
+    .then(data => {setUserStatus(data['userLoggedIn'])
+                   setUserInfo(null)
+                   dispatch(clearUser())
+                   window.location.reload()})
+    //.then(data => {window.location.reload()})
+    .catch(err => {})
+  }
+
+  function Login() {
+    
+      var auth_provider = "google-oidc"
+      var login_url = producerLoginRedirectEndpoint + "?auth_provider=" + auth_provider
+      window.location.href = login_url
+    
+  
+    // return (
+    //     <div>
+    //       <button onClick={googleLogin}>Login</button>
+    //     </div>
+        
+    // );
+  }
+
+
   const dropdownToggle = (e) => {
     setDropdownOpen(!dropdownOpen);
   };
@@ -92,6 +235,9 @@ function Header(props) {
     }
   }, [location]);
 
+
+
+
   const Back = () => {
     const history = useHistory();
     return (
@@ -102,6 +248,7 @@ function Header(props) {
   }
   return (
     // add or remove classes depending if we are on full-screen-maps page or not
+    // <UserInfoContext.Provider value={userInfo}>
     <Navbar
       color={
         props.location.pathname.indexOf("full-screen-maps") !== -1
@@ -115,6 +262,8 @@ function Header(props) {
           : "navbar-absolute fixed-top " +
             (color === "transparent" ? "navbar-transparent " : "")
       }
+      style={{height:"2px",
+              padding:"0px"}}
     >
       <Container fluid>
         <div className="navbar-wrapper">
@@ -176,18 +325,44 @@ function Header(props) {
                 <DropdownItem tag="a">Something else here</DropdownItem>
               </DropdownMenu>
             </Dropdown> */}
-            <NavItem>
-              <Link to="/admin/account" className="nav-link btn-rotate">
+            {/* <NavItem>    
+              <div className="App">
+                <GoogleLogin
+                  clientId="948015774179-npt9te70n4gei741hm9sfe95agqlnsag.apps.googleusercontent.com"
+                  buttonText="Google Login"
+                  onSuccess={responseGoogle}
+                  onFailure={responseGoogle}
+                  cookiePolicy={'single_host_origin'}
+                  />
+                  <br/>
+                  <button onClick={temp}> Check session </button>
+              </div>
+            </NavItem> */}
+
+
+            <Dropdown
+              nav
+              isOpen={dropdownOpen}
+              toggle={(e) => dropdownToggle(e)}
+            >
+              <DropdownToggle caret={false} nav>
                 <i className="nc-icon nc-circle-10" />
-                <p>
-                  <span className="d-lg-none d-md-block">Account</span>
-                </p>
-              </Link>
-            </NavItem>
+              </DropdownToggle>
+              {userLoggedIn ?
+                <DropdownMenu right>
+                  <DropdownItem tag="a"><Link to={{pathname: '/admin/user', state: userInfo}}>User Profile</Link> </DropdownItem>
+                  <DropdownItem tag="a" onClick={logout}>Logout</DropdownItem>
+                </DropdownMenu>:
+                <DropdownMenu right>
+                  <DropdownItem tag="a" onClick={Login}>Login</DropdownItem>
+                </DropdownMenu>
+              }
+            </Dropdown>
           </Nav>
         </Collapse>
       </Container>
     </Navbar>
+    //</UserInfoContext.Provider>
   );
 }
 

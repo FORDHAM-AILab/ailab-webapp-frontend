@@ -16,7 +16,11 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React from "react";
+import React, { useState, useEffect} from "react";
+import { useLocation } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { saveUser, updateUser, clearUser } from "reducers/cache_user";
+import { Alert } from 'reactstrap';
 
 // reactstrap components
 import {
@@ -33,10 +37,71 @@ import {
   Col,
 } from "reactstrap";
 
+
+
 function User() {
+
+  const [userProfile, setUserProfile] = useState()
+  const [alertType, setAlertType] = useState(false);
+  const [message, setMessage] = useState();
+  const [isAlertVisible, setIsAlertVisible] = useState(false);
+  const user  = useSelector(state => state.users.user)
+  const dispatch = useDispatch()
+  React.useEffect(() => {
+    if (user['internal_sub_id'] === undefined){
+      window.location = '/admin/home'
+    }
+    setUserProfile(user)
+  }, [])
+
+  useEffect(() => {
+    window.setTimeout(() => {
+        setIsAlertVisible(false)
+    }, 3000)
+}, [message])
+
+
+function onUserFileSubmit(e){
+  e.preventDefault()
+  console.log(userProfile)
+  console.log(user)
+  fetch('http://localhost:8888/users/update_user_profile', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    credentials: 'include',
+    body: JSON.stringify({
+      userProfile
+    })
+  })
+  .then(res => res.json())
+  .then(
+      (result) => {
+        if (result['status'] == 0){
+            setAlertType('success')
+            setMessage(`Update succeed!`)
+            setIsAlertVisible(true)
+            dispatch(updateUser(userProfile))
+          }
+          else{
+            setAlertType('danger')
+            setMessage(`Failed. ${result['message']}`)
+            setIsAlertVisible(true)
+            console.log(message)
+          }
+      }
+  )
+}
+
   return (
     <>
       <div className="content">
+      <div style={{ position: "fixed", top: 0, left: 259, right: 0, zIndex: 2000}}>
+                            <Alert color={alertType} isOpen={isAlertVisible} toggle={() => setIsAlertVisible(false)}>
+                                {message}
+                            </Alert>
+                        </div>
         <Row>
           <Col md="4">
             <Card className="card-user">
@@ -52,15 +117,16 @@ function User() {
                     <img
                       alt="..."
                       className="avatar border-gray"
-                      src={require("assets/img/mike.jpg").default}
+                      src={require("assets/img/Enrico-Fermi-Italian-problem-physics-1950.jpeg").default}
                     />
-                    <h5 className="title">Chet Faker</h5>
+                    <h5 className="title">{user['username']}</h5>
                   </a>
-                  <p className="description">@chetfaker</p>
                 </div>
                 <p className="description text-center">
-                  "I like the way you work it <br />
-                  No diggity <br />I wanna bag it up"
+                  "There are two possible outcomes: if the result <br/>
+                  confirms the hypothesis, then you've made a <br/>
+                  measurement. If the result is contrary to the <br/>
+                  hypothesis, then you've made a discovery."
                 </p>
               </CardBody>
               <CardFooter>
@@ -69,20 +135,20 @@ function User() {
                   <Row>
                     <Col className="ml-auto" lg="3" md="6" xs="6">
                       <h5>
-                        12 <br />
-                        <small>Files</small>
+                        99+ <br />
+                        <small>Research</small>
                       </h5>
                     </Col>
                     <Col className="ml-auto mr-auto" lg="4" md="6" xs="6">
                       <h5>
-                        2GB <br />
-                        <small>Used</small>
+                        99+ <br />
+                        <small>Competitions</small>
                       </h5>
                     </Col>
                     <Col className="mr-auto" lg="3">
                       <h5>
-                        24,6$ <br />
-                        <small>Spent</small>
+                        1 <br />
+                        <small>Rank</small>
                       </h5>
                     </Col>
                   </Row>
@@ -91,108 +157,15 @@ function User() {
             </Card>
             <Card>
               <CardHeader>
-                <CardTitle tag="h4">Team Members</CardTitle>
+                <CardTitle tag="h4">New Research</CardTitle>
               </CardHeader>
-              <CardBody>
-                <ul className="list-unstyled team-members">
-                  <li>
-                    <Row>
-                      <Col md="2" xs="2">
-                        <div className="avatar">
-                          <img
-                            alt="..."
-                            className="img-circle img-no-padding img-responsive"
-                            src={
-                              require("assets/img/faces/ayo-ogunseinde-2.jpg")
-                                .default
-                            }
-                          />
-                        </div>
-                      </Col>
-                      <Col md="7" xs="7">
-                        DJ Khaled <br />
-                        <span className="text-muted">
-                          <small>Offline</small>
-                        </span>
-                      </Col>
-                      <Col className="text-right" md="3" xs="3">
-                        <Button
-                          className="btn-round btn-icon"
-                          color="success"
-                          outline
-                          size="sm"
-                        >
-                          <i className="fa fa-envelope" />
-                        </Button>
-                      </Col>
-                    </Row>
-                  </li>
-                  <li>
-                    <Row>
-                      <Col md="2" xs="2">
-                        <div className="avatar">
-                          <img
-                            alt="..."
-                            className="img-circle img-no-padding img-responsive"
-                            src={
-                              require("assets/img/faces/joe-gardner-2.jpg")
-                                .default
-                            }
-                          />
-                        </div>
-                      </Col>
-                      <Col md="7" xs="7">
-                        Creative Tim <br />
-                        <span className="text-success">
-                          <small>Available</small>
-                        </span>
-                      </Col>
-                      <Col className="text-right" md="3" xs="3">
-                        <Button
-                          className="btn-round btn-icon"
-                          color="success"
-                          outline
-                          size="sm"
-                        >
-                          <i className="fa fa-envelope" />
-                        </Button>
-                      </Col>
-                    </Row>
-                  </li>
-                  <li>
-                    <Row>
-                      <Col md="2" xs="2">
-                        <div className="avatar">
-                          <img
-                            alt="..."
-                            className="img-circle img-no-padding img-responsive"
-                            src={
-                              require("assets/img/faces/clem-onojeghuo-2.jpg")
-                                .default
-                            }
-                          />
-                        </div>
-                      </Col>
-                      <Col className="col-ms-7" xs="7">
-                        Flume <br />
-                        <span className="text-danger">
-                          <small>Busy</small>
-                        </span>
-                      </Col>
-                      <Col className="text-right" md="3" xs="3">
-                        <Button
-                          className="btn-round btn-icon"
-                          color="success"
-                          outline
-                          size="sm"
-                        >
-                          <i className="fa fa-envelope" />
-                        </Button>
-                      </Col>
-                    </Row>
-                  </li>
-                </ul>
-              </CardBody>
+              <CardBody><a href="#">Start</a></CardBody>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle tag="h4">New Dataset</CardTitle>
+              </CardHeader>
+              <CardBody><a href="#">Upload</a></CardBody>
             </Card>
           </Col>
           <Col md="8">
@@ -201,16 +174,27 @@ function User() {
                 <CardTitle tag="h5">Edit Profile</CardTitle>
               </CardHeader>
               <CardBody>
-                <Form>
+              <Form onSubmit={(e) => {onUserFileSubmit(e)}} onChange={(e) => {setUserProfile(prev => ({...prev, [e.target.name]: e.target.value}))}}>
                   <Row>
-                    <Col className="pr-1" md="5">
-                      <FormGroup>
-                        <label>Company (disabled)</label>
+                    <Col className="pr-1" md="3">
+                      <FormGroup >
+                        <label>Program</label>
                         <Input
-                          defaultValue="Creative Code Inc."
-                          disabled
-                          placeholder="Company"
+                          defaultValue={user['program'] !== undefined? user['program']: ''}
+                          placeholder="e.g. MSQF"
                           type="text"
+                          name="program"
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col className="pr-1" md="2">
+                      <FormGroup >
+                        <label>Cohort</label>
+                        <Input
+                          defaultValue={user['cohort'] !== undefined? user['cohort']: ''}
+                          placeholder="e.g. 14"
+                          type="text"
+                          name="cohort"
                         />
                       </FormGroup>
                     </Col>
@@ -218,18 +202,19 @@ function User() {
                       <FormGroup>
                         <label>Username</label>
                         <Input
-                          defaultValue="michael23"
+                          defaultValue={user['username'] !== undefined? user['username']: ''}
                           placeholder="Username"
                           type="text"
+                          name="username"
                         />
                       </FormGroup>
                     </Col>
                     <Col className="pl-1" md="4">
                       <FormGroup>
                         <label htmlFor="exampleInputEmail1">
-                          Email address
+                          Email Address
                         </label>
-                        <Input placeholder="Email" type="email" />
+                        <Input defaultValue={user['email']} type="email" name="email" disabled/>
                       </FormGroup>
                     </Col>
                   </Row>
@@ -238,9 +223,10 @@ function User() {
                       <FormGroup>
                         <label>First Name</label>
                         <Input
-                          defaultValue="Chet"
-                          placeholder="Company"
+                          defaultValue={user['first_name'] !== undefined? user['first_name']: ''}
+                          placeholder="First Name"
                           type="text"
+                          name="first_name"
                         />
                       </FormGroup>
                     </Col>
@@ -248,9 +234,10 @@ function User() {
                       <FormGroup>
                         <label>Last Name</label>
                         <Input
-                          defaultValue="Faker"
+                          defaultValue={user['last_name'] !== undefined? user['last_name']:''}
                           placeholder="Last Name"
                           type="text"
+                          name="last_name"
                         />
                       </FormGroup>
                     </Col>
@@ -258,50 +245,12 @@ function User() {
                   <Row>
                     <Col md="12">
                       <FormGroup>
-                        <label>Address</label>
+                        <label>Area of Interest</label>
                         <Input
-                          defaultValue="Melbourne, Australia"
-                          placeholder="Home Address"
+                        defaultValue={user['area_of_interest'] !== undefined? user['area_of_interest']: ''}
+                          placeholder="anything"
                           type="text"
-                        />
-                      </FormGroup>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col className="pr-1" md="4">
-                      <FormGroup>
-                        <label>City</label>
-                        <Input
-                          defaultValue="Melbourne"
-                          placeholder="City"
-                          type="text"
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col className="px-1" md="4">
-                      <FormGroup>
-                        <label>Country</label>
-                        <Input
-                          defaultValue="Australia"
-                          placeholder="Country"
-                          type="text"
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col className="pl-1" md="4">
-                      <FormGroup>
-                        <label>Postal Code</label>
-                        <Input placeholder="ZIP Code" type="number" />
-                      </FormGroup>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col md="12">
-                      <FormGroup>
-                        <label>About Me</label>
-                        <Input
-                          type="textarea"
-                          defaultValue="Oh so, your weak rhyme You doubt I'll bother, reading into it"
+                          name="area_of_interest"
                         />
                       </FormGroup>
                     </Col>
@@ -318,6 +267,25 @@ function User() {
                     </div>
                   </Row>
                 </Form>
+              </CardBody>
+            </Card>
+            <Card className="card-user">
+              <CardHeader>
+                <CardTitle tag="h5">My works</CardTitle>
+              </CardHeader>
+              <CardBody>
+                <CardTitle tag="h6">Research</CardTitle>
+                  <li style={{"text-indent": 20}}><a href="#"> Sample 1</a></li>
+                  <li style={{"text-indent": 20}}><a href="#"> Sample 2</a></li>
+                  <li style={{"text-indent": 20}}><a href="#"> Sample 3</a></li>
+                <CardTitle tag="h6">Competitions</CardTitle>
+                  <li style={{"text-indent": 20}}><a href="#"> Sample 1</a></li>
+                  <li style={{"text-indent": 20}}><a href="#"> Sample 2</a></li>
+                  <li style={{"text-indent": 20}}><a href="#"> Sample 3</a></li>
+                <CardTitle tag="h6">Datasets</CardTitle>
+                  <li style={{"text-indent": 20}}><a href="#"> Sample 1</a></li>
+                  <li style={{"text-indent": 20}}><a href="#"> Sample 2</a></li>
+                  <li style={{"text-indent": 20}}><a href="#"> Sample 3</a></li>
               </CardBody>
             </Card>
           </Col>
