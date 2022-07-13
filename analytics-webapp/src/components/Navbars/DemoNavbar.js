@@ -65,14 +65,14 @@ function Header(props) {
   };
 
 
-  const producerLoginRedirectEndpoint= 'http://localhost:8888/login-redirect';
-  const producerLoginEndpoint = 'http://localhost:8888/login/';
-  const producerLogoutEndpoint = 'http://localhost:8888/logout/';
-  const producerLoginCheckEndpoint = 'http://localhost:8888/user-session-status/';
+  const producerLoginRedirectEndpoint= `http://${API_URL}/login-redirect`;
+  const producerLoginEndpoint = `http://${API_URL}/login/`;
+  const producerLogoutEndpoint = `http://${API_URL}/logout/`;
+  const producerLoginCheckEndpoint = `http://${API_URL}/user-session-status/`;
 
   const dispatch = useDispatch()
   const user = useSelector(state => state.user)
-  
+  const API_URL = process.env.REACT_APP_API_URL
   React.useEffect(() => {
     authenticate();
 

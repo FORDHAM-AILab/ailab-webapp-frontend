@@ -31,7 +31,7 @@ function OptionsAnalysis() {
   const [options_specs, SetOptionsPricingSpecs] = useState({"method": "BS", "options_type": "call", "s":100, "k": 120, "vol": 0.15, "T": 1, "rf": 0.05, "div": 0, "N": 10})
   const [options_data, SetOptionData] = useState([])
   const [options_price, SetOptionsPrice] = useState()
-
+  const API_URL = process.env.REACT_APP_API_URL
 
 
 
@@ -183,7 +183,7 @@ function OptionsAnalysis() {
 
   async function get_options_expiration_dates (ticker) {
     
-    let request_url = `http://localhost:8888/options/get_options_expiration_date/${ticker}`;
+    let request_url = `http://${API_URL}/options/get_options_expiration_date/${ticker}`;
     const response = await fetch(request_url);
     const data = await response.json();
     const result = data["result"]
@@ -193,7 +193,7 @@ function OptionsAnalysis() {
 
   async function get_options_data (ticker, date, options_type) {
     
-    let request_url = `http://localhost:8888/options/get_options_data_api`;
+    let request_url = `http://${API_URL}/options/get_options_data_api`;
     const response = await fetch(request_url, {
       method: 'POST',
       headers: {
@@ -213,7 +213,7 @@ function OptionsAnalysis() {
 
 
   async function option_pricing (specs) {
-    let request_url = `http://localhost:8888/options/options_pricing`;
+    let request_url = `http://${API_URL}/options/options_pricing`;
     console.log(JSON.stringify(specs))
     const response = await fetch(request_url, {
       method: 'POST',

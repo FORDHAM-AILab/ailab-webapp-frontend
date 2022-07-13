@@ -37,10 +37,10 @@ function CDSView() {
   const [cds_data, SetCDSData] = useState()
   const [data_requested, SetDataRequested] = useState(false)
   const [options_price, SetOptionsPrice] = useState()
-
+  const API_URL = process.env.REACT_APP_API_URL
 
   async function fetch_cds_param_values(param){
-    fetch(`http://localhost:8888/data/data_warehouse/cds_get_unique_val/${param}`)
+    fetch(`http://${API_URL}/data/data_warehouse/cds_get_unique_val/${param}`)
     .then((response) => response.json())
     .then((responseData) => {
       let result = responseData["result"];
@@ -54,7 +54,7 @@ function CDSView() {
 
   async function get_cds_data(){
     console.log("Fetching data start")
-    const result = fetch('http://localhost:8888/data/data_warehouse/get_cds_data', {
+    const result = fetch(`http://${API_URL}/data/data_warehouse/get_cds_data`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

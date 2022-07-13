@@ -22,6 +22,7 @@ function PortfolioAnalysis() {
   const [var_alpha, setVarAlpha] = useState(0);
   const [expected_return, setER] = useState(null);
   const [calculated_weights, setCalculatedWeights] = useState(null)
+  const API_URL = process.env.REACT_APP_API_URL
   //const [file, upLoadFile] = useState();
 
   // function handleFileUpload(event) {
@@ -253,7 +254,7 @@ function PortfolioAnalysis() {
 
   async function fetch_data (tickers, start_date, end_date) {
     
-    let request_url = `http://localhost:8888/data/load_hist_stock_price/${start_date}/${end_date}?`;
+    let request_url = `http://${API_URL}/data/load_hist_stock_price/${start_date}/${end_date}?`;
     const ticker_list = tickers.split(',').map(function(item){
       return item.trim();
     })
@@ -275,7 +276,7 @@ function PortfolioAnalysis() {
   }
 
   async function get_basic_info(data, weights) {
-    const response = await fetch('http://localhost:8888/portfolio/get_basic_info', {
+    const response = await fetch(`http://${API_URL}/portfolio/get_basic_info`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -294,7 +295,7 @@ function PortfolioAnalysis() {
   }
 
   async function calc_valueatrisk(data, weights, var_level, var_iterations, var_alpha){
-    const result = fetch('http://localhost:8888/portfolio/valueatrisk', {
+    const result = fetch(`http://${API_URL}/portfolio/valueatrisk`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -313,7 +314,7 @@ function PortfolioAnalysis() {
   }
   
   async function calc_sharpe_ratio(data, rf){
-    const response = await fetch('http://localhost:8888/portfolio/sharpe_ratio', {
+    const response = await fetch(`http://${API_URL}/portfolio/sharpe_ratio`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -331,7 +332,7 @@ function PortfolioAnalysis() {
 
 
   async function calc_weights(){
-    const response = await fetch('http://localhost:8888/portfolio/weights_optimization', {
+    const response = await fetch(`http://${API_URL}/portfolio/weights_optimization`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

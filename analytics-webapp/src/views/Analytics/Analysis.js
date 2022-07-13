@@ -17,7 +17,9 @@ import {
 } from "reactstrap";
 
 function Analysis (){
-    const link_to_doc = <a href="http://localhost:8888/docs">link</a>
+    const API_URL = process.env.REACT_APP_API_URL
+    link_href = `http://${API_URL}/docs`
+    const link_to_doc = <a href={link_href}>link</a>
     return (
         <div className="content">
             <Col md="12">

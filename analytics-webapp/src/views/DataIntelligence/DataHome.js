@@ -50,10 +50,11 @@ function DataDashboard() {
   const [top_losers, setTopLosers] = useState();
   const [activeTab, setActiveTab] = useState('1');
   const time_range = 'daily';
+  const API_URL = process.env.REACT_APP_API_URL
 
 
   function get_top_gainers_or_losers(type){
-    fetch(`http://localhost:8888/data/stock/get_top_${type}/${time_range}`)
+    fetch(`http://${API_URL}/data/stock/get_top_${type}/${time_range}`)
     .then((response) => response.json())
     .then((responseData) => {
       if (type === 'gainers'){

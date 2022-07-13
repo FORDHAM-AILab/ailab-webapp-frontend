@@ -18,6 +18,7 @@ import {
 } from "reactstrap";
 
 function ChallengeHome (){
+    const API_URL = process.env.REACT_APP_API_URL
     return (
         <div className="content">
             <Col md="12">
