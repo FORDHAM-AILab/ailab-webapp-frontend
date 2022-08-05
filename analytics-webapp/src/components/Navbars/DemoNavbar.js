@@ -127,15 +127,16 @@ function Header(props) {
     fetch(producerLoginEndpoint, request)
     .then(response => {
       // Check user is logged in
-      
+      var auth_token = 0;
       for (var pair of response.headers.entries()) {
         console.log(pair[0])
         if (pair[0] === "x-authorization"){
-          setAccessToken(pair[1]);
+          auth_token = pair[1]
+          setAccessToken(auth_token);
         }
       }
-      console.log('check ', pair[1])
-      checkUserSessionStatus(pair[1])
+      console.log('check ', auth_token)
+      checkUserSessionStatus(auth_token)
       
     })
     .catch(err => {})
