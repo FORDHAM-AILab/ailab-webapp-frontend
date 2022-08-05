@@ -53,6 +53,7 @@ function Header(props) {
   const [userLoggedIn, setUserStatus] = React.useState(false)
   const [color, setColor] = React.useState("transparent");
   const [userInfo, setUserInfo] = React.useState(null);
+  const [AccessToken, setAccessToken] = React.useState(null);
   const sidebarToggle = React.useRef();
   const location = useLocation();
   const toggle = () => {
@@ -110,7 +111,7 @@ function Header(props) {
       getAccessToken(authToken)
     } else {
       // Check user is logged in
-      checkUserSessionStatus()
+      checkUserSessionStatus(AccessToken)
     }
   }
 
@@ -126,17 +127,26 @@ function Header(props) {
     fetch(producerLoginEndpoint, request)
     .then(response => {
       // Check user is logged in
-      console.log(response)
-      checkUserSessionStatus()
+      
+      for (var pair of response.headers.entries()) {
+        console.log(pair[0])
+        if (pair[0] === "x-authorization"){
+          setAccessToken(pair[1]);
+        }
+      }
+      checkUserSessionStatus(pair[1])
+      
     })
-    .then(data => {})
     .catch(err => {})
   }
 
-  const checkUserSessionStatus = () => {
+  const checkUserSessionStatus = (auth) => {
     const request = {
       method: 'GET',
-      credentials: 'include'
+      credentials: 'include',
+      headers: {
+        "Authorization": auth
+      },
     }
 
     fetch(producerLoginCheckEndpoint, request)

@@ -1,0 +1,28 @@
+{
+  "files": {
+    "main.css": "/static/css/main.349a8e06.chunk.css",
+    "main.js": "/static/js/main.84a70be1.chunk.js",
+    "main.js.map": "/static/js/main.84a70be1.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.32294d02.js",
+    "runtime-main.js.map": "/static/js/runtime-main.32294d02.js.map",
+    "static/css/2.54208fce.chunk.css": "/static/css/2.54208fce.chunk.css",
+    "static/js/2.5d5662fc.chunk.js": "/static/js/2.5d5662fc.chunk.js",
+    "static/js/2.5d5662fc.chunk.js.map": "/static/js/2.5d5662fc.chunk.js.map",
+    "index.html": "/index.html",
+    "static/css/2.54208fce.chunk.css.map": "/static/css/2.54208fce.chunk.css.map",
+    "static/css/main.349a8e06.chunk.css.map": "/static/css/main.349a8e06.chunk.css.map",
+    "static/js/2.5d5662fc.chunk.js.LICENSE.txt": "/static/js/2.5d5662fc.chunk.js.LICENSE.txt",
+    "static/js/main.84a70be1.chunk.js.LICENSE.txt": "/static/js/main.84a70be1.chunk.js.LICENSE.txt",
+    "static/media/Enrico-Fermi-Italian-problem-physics-1950.jpeg": "/static/media/Enrico-Fermi-Italian-problem-physics-1950.f98f794c.jpeg",
+    "static/media/damir-bosnjak.jpg": "/static/media/damir-bosnjak.efcaca50.jpg",
+    "static/media/logo.103b5fa1.svg": "/static/media/logo.103b5fa1.svg",
+    "static/media/paper-dashboard.scss?v=1.3.0": "/static/media/nucleo-icons.ec16bc4c.woff2"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.32294d02.js",
+    "static/css/2.54208fce.chunk.css",
+    "static/js/2.5d5662fc.chunk.js",
+    "static/css/main.349a8e06.chunk.css",
+    "static/js/main.84a70be1.chunk.js"
+  ]
+}
