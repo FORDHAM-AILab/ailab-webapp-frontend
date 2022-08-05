@@ -134,18 +134,19 @@ function Header(props) {
           setAccessToken(pair[1]);
         }
       }
+      console.log('check ', pair[1])
       checkUserSessionStatus(pair[1])
       
     })
     .catch(err => {})
   }
 
-  const checkUserSessionStatus = (auth) => {
+  const checkUserSessionStatus = (authtoken) => {
     const request = {
       method: 'GET',
       credentials: 'include',
       headers: {
-        "Authorization": auth
+        "Authorization": authtoken
       },
     }
 
