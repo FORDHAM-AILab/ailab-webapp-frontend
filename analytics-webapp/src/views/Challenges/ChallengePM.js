@@ -161,6 +161,10 @@ function ChallengePM (){
                                         <Button onClick={() => fetch(`http://${API_URL}/game/rm_game/create_rm_game_user`, {
                                                 method: 'POST',
                                                 credentials: 'include',
+                                                headers: {
+                                                    'Content-Type': 'application/json',
+                                                    "Authorization": user['access_token']
+                                                }
                                             }).then(
                                                 response => {
                                                     
