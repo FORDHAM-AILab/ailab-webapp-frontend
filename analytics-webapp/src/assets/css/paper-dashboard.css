@@ -4806,6 +4806,10 @@ License - nucleoapp.com/license/
 *, *:focus, a, a:focus {
   outline: none; }
 
-
+  ._loading_overlay_wrapper {position: fixed; }
+  ._loading_overlay_overlay {position: fixed; }
+  ._loading_overlay_content {position: fixed; }
+  ._loading_overlay_spinner {position: fixed; }
+  
 
 /*# sourceMappingURL=paper-dashboard.css.map */

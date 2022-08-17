@@ -25,6 +25,7 @@ import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 import AsyncSelect from 'react-select/async';
 import { CSVLink, CSVDownload } from "react-csv";
+import LoadingOverlay from 'react-loading-overlay';
 
 
 function CDSView() {
@@ -37,9 +38,13 @@ function CDSView() {
   const [cds_data, SetCDSData] = useState()
   const [data_requested, SetDataRequested] = useState(false)
   const [options_price, SetOptionsPrice] = useState()
+  const [isLoading, setIsLoading] = useState(false);
   const API_URL = process.env.REACT_APP_API_URL
 
   async function fetch_cds_param_values(param){
+    if (param == 'CREDIT_EVENTS'){
+      setIsLoading(true)
+    }
     fetch(`http://${API_URL}/data/data_warehouse/cds_get_unique_val/${param}`)
     .then((response) => response.json())
     .then((responseData) => {
@@ -49,6 +54,7 @@ function CDSView() {
         ...prevState,
         [param]: filterOptions
       }))
+      setIsLoading(false)
     })
   }
 
@@ -65,12 +71,15 @@ function CDSView() {
       )
   }
 
+  async function set_params(){
+    Object.keys(cds_specs_list).map((key,index)=>(
+      fetch_cds_param_values(key)
+  ))
+  }
+
 
   useEffect(()=>{
-    Object.keys(cds_specs_list).map((key,index)=>(
-    
-        fetch_cds_param_values(key)
-    ))
+    set_params()
   }, [])
 
   function CDSFilter(param){
@@ -167,6 +176,12 @@ function CDSView() {
 
   return (
     <>
+            
+    <LoadingOverlay 
+    active={isLoading}
+    spinner
+    text='Loading params...'
+    >
     <div className="content">
       <Row>
         <Col md="12">
@@ -181,6 +196,7 @@ function CDSView() {
       </Row>
       
     </div>
+    </LoadingOverlay>
     </>
   );
 }

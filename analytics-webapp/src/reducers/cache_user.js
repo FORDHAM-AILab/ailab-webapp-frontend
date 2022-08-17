@@ -23,7 +23,8 @@ import { createSlice } from '@reduxjs/toolkit'
 export const users = createSlice({
   name: 'user',
   initialState: {
-    user: {}
+    user: null,
+    access_token: null
   },
   reducers: {
     saveUser: (state, action)=> {
@@ -33,11 +34,17 @@ export const users = createSlice({
       state.user = action.payload
     },
     clearUser: state => {
-      state.user = {}
+      state.user = null
+    },
+    setToken: (state,action) => {
+      state.access_token = action.payload
+    },
+    clearToken: state => {
+      state.access_token = null
     }
   }
 })
 
-export const {saveUser, updateUser, clearUser} = users.actions
+export const {saveUser, updateUser, clearUser, setToken, clearToken} = users.actions
 
 export default users.reducer

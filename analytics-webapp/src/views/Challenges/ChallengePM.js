@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useLayoutEffect } from "react";
 import DynamicTable from "components/Tables/table";
 // react plugin used to create charts
 import { NavLink } from "react-router-dom";
@@ -9,6 +9,7 @@ import Cookies from 'js-cookie'
 import { useHistory } from 'react-router'
 import { saveUser, clearUser } from "reducers/cache_user";
 import { Alert } from 'reactstrap';
+import LoadingOverlay from 'react-loading-overlay';
 
 // reactstrap components
 import {
@@ -33,17 +34,21 @@ function ChallengePM (){
     const [alertType, setAlertType] = useState(false);
     const [message, setMessage] = useState();
     const [isAlertVisible, setIsAlertVisible] = useState(false);
-
+    const [isLoading, setIsLoading] = useState(false);
+    var access_token = useSelector(state => state.users.access_token)
     const user  = useSelector(state => state.users.user)
     const API_URL = process.env.REACT_APP_API_URL
     const dispatch = useDispatch()
     useEffect(() => {  
         get_rank('net_account_value')
-        if (Object.keys(user).length > 0){
-            get_user_account_info(user['internal_sub_id'])
-            get_transactions(user['internal_sub_id'])
-            get_positions()
+        if ((user !== null) && (user !== undefined)){
+            if (Object.keys(user).length > 0){
+                get_user_account_info(user['internal_sub_id'])
+                get_transactions(user['internal_sub_id'])
+                get_positions()
+            }
         }
+
         },[])
 
     useEffect(() => {
@@ -51,6 +56,17 @@ function ChallengePM (){
             setIsAlertVisible(false)
         }, 8000)
     }, [isAlertVisible])
+
+    useLayoutEffect(() => {
+        if (isLoading) {
+          document.body.style.overflow = "hidden";
+          document.body.style.height = "100%";
+        }
+        if (!isLoading) {
+          document.body.style.overflow = "auto";
+          document.body.style.height = "auto";
+        }
+      }, [isLoading]);
 
     async function get_rank(by){
         fetch(`http://${API_URL}/game/rm_game/rank_players_rm/${by}`)
@@ -67,7 +83,7 @@ function ChallengePM (){
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
-              "Authorization": user['access_token']
+              "Authorization": access_token
             },
             credentials: 'include'
           })
@@ -83,7 +99,7 @@ function ChallengePM (){
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
-              "Authorization": user['access_token']
+              "Authorization": access_token
             },
             credentials: 'include'
           }).then(
@@ -110,7 +126,7 @@ function ChallengePM (){
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
-              "Authorization": user['access_token']
+              "Authorization": access_token
             },
             credentials: 'include'
           }).then(
@@ -139,7 +155,7 @@ function ChallengePM (){
     const pl = 'P&L'
 
     function Component(){
-        if (Object.keys(user).length === 0){
+        if ((user === null) || (user === undefined)){
             return (<p>Log in to view your records</p>)
         }
         
@@ -163,7 +179,7 @@ function ChallengePM (){
                                                 credentials: 'include',
                                                 headers: {
                                                     'Content-Type': 'application/json',
-                                                    "Authorization": user['access_token']
+                                                    "Authorization": access_token
                                                 }
                                             }).then(
                                                 response => {
@@ -204,7 +220,7 @@ function ChallengePM (){
             }
             else{
                 return (
-                    <div>
+                    <div >
                         <div style={{ position: "fixed", top: 0, left: 259, right: 0, zIndex: 2000 }}>
                             <Alert color={alertType} isOpen={isAlertVisible} toggle={() => setIsAlertVisible(false)}>
                                 {message}
@@ -399,11 +415,12 @@ function ChallengePM (){
     function OrderForm(){
         async function handleSubmit(e){
             e.preventDefault();
+            setIsLoading(true)
             fetch(`http://${API_URL}/game/rm_game/update_portfolio`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              "Authorization": user['access_token']
+              "Authorization": access_token
             },
             credentials: 'include',
             body: JSON.stringify({
@@ -413,13 +430,13 @@ function ChallengePM (){
           .then(res => res.json())
           .then(
               (result) => {
+                    setIsLoading(false)
                 if (result['status'] == 0){
                     setAlertType('success')
                     setMessage(`Transaction succeed!`)
                     setIsAlertVisible(true)
                   }
                   else{
-
                     setAlertType('danger')
                     setMessage(`Failed. ${result['message']}`)
                     setIsAlertVisible(true)
@@ -465,8 +482,20 @@ function ChallengePM (){
 
 
     return (
-        <div className="content">
+        <div className="content" >
+            
+            <LoadingOverlay styles={{
+                _loading_overlay_wrapper: {position: 'fixed'},
+                _loading_overlay_overlay: {position: 'fixed'},
+                _loading_overlay_content: {position: 'fixed'},
+                _loading_overlay_spinner: {position: 'fixed'}
+            }}
+            active={isLoading}
+            spinner
+            text='Executing...'
+            >
             {Component()}
+            </LoadingOverlay>
         </div>
     );
 }

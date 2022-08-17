@@ -46,6 +46,7 @@ function User() {
   const [message, setMessage] = useState();
   const [isAlertVisible, setIsAlertVisible] = useState(false);
   var user  = useSelector(state => state.users.user)
+  var access_token = useSelector(state => state.users.access_token)
   const dispatch = useDispatch()
   React.useEffect(() => {
     if (user['internal_sub_id'] === undefined){
@@ -69,7 +70,7 @@ function onUserFileSubmit(e){
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      "Authorization": user['access_token']
+      "Authorization": access_token
     },
     credentials: 'include',
     body: JSON.stringify({

@@ -40,7 +40,7 @@ import {routes, sidebar_routes} from "routes.js";
 import Button from "@restart/ui/esm/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { users } from "reducers/cache_user";
-import { saveUser, clearUser } from "reducers/cache_user";
+import { saveUser, clearUser, setToken, clearToken } from "reducers/cache_user";
 import Cookies from 'js-cookie'
 
 
@@ -50,10 +50,8 @@ import Cookies from 'js-cookie'
 function Header(props) {
   const [isOpen, setIsOpen] = React.useState(false);
   const [dropdownOpen, setDropdownOpen] = React.useState(false);
-  const [userLoggedIn, setUserStatus] = React.useState(false)
   const [color, setColor] = React.useState("transparent");
-  const [userInfo, setUserInfo] = React.useState(null);
-  const [AccessToken, setAccessToken] = React.useState(null);
+  const [temp_access_token, setTempAccessToken] = React.useState(null);
   const sidebarToggle = React.useRef();
   const location = useLocation();
   const toggle = () => {
@@ -72,11 +70,11 @@ function Header(props) {
   const producerLoginCheckEndpoint = `http://${API_URL}/user-session-status/`;
 
   const dispatch = useDispatch()
-  var user = useSelector(state => state.user)
+  var user = useSelector(state => state.users.user)
+  var access_token = useSelector(state => state.users.access_token)
   
   React.useEffect(() => {
     authenticate();
-
   }, [])
 
   const setCookie = (cname, cvalue, exdays) => {
@@ -111,7 +109,7 @@ function Header(props) {
       getAccessToken(authToken)
     } else {
       // Check user is logged in
-      checkUserSessionStatus(AccessToken)
+      checkUserSessionStatus(access_token)
     }
   }
 
@@ -127,27 +125,29 @@ function Header(props) {
     fetch(producerLoginEndpoint, request)
     .then(response => {
       // Check user is logged in
-      var auth_token = 0;
+      var cur_access_token = 0;
       for (var pair of response.headers.entries()) {
         console.log(pair[0])
         if (pair[0] === "x-authorization"){
-          auth_token = pair[1]
-          setAccessToken(auth_token);
+          cur_access_token = pair[1]
+          dispatch(setToken(cur_access_token))
         }
       }
-      console.log('check ', auth_token)
-      checkUserSessionStatus(auth_token)
+      console.log('check ', cur_access_token)
+      console.log(access_token)
+      checkUserSessionStatus(cur_access_token)
       
     })
     .catch(err => {})
   }
 
-  const checkUserSessionStatus = (authtoken) => {
+  const checkUserSessionStatus = (cur_access_token) => {
+
     const request = {
       method: 'GET',
       credentials: 'include',
       headers: {
-        "Authorization": authtoken
+        "Authorization": (access_token === null)? cur_access_token: access_token
       },
     }
 
@@ -158,23 +158,18 @@ function Header(props) {
       }
       else{
         console.log('clear user')
-        setUserStatus(false)
         dispatch(clearUser())
       }
       })
     .then(data => {
-      setUserStatus(data['userLoggedIn']);
-      setUserInfo(data['userInfo'])
       if (data['userLoggedIn']){
-        var userinfo = data['userInfo']
-        userinfo['access_token'] = authtoken
-        dispatch(saveUser(userinfo))
-        console.log(user)
+        dispatch(saveUser(data['userInfo']))
+        dispatch(setToken((access_token === null)? cur_access_token: access_token))
       }
       else{
         console.log('clear user')
         dispatch(clearUser())
-        setUserStatus(false)
+        dispatch(clearToken())
       }
       
     })
@@ -189,16 +184,15 @@ function Header(props) {
 
     fetch(producerLogoutEndpoint, request)
     .then(response => response.json())
-    .then(data => {setUserStatus(data['userLoggedIn'])
-                   setUserInfo(null)
+    .then(data => {dispatch(clearToken())
                    dispatch(clearUser())
                    window.location.reload()})
-    //.then(data => {window.location.reload()})
     .catch(err => {})
   }
 
   function Login() {
-    
+      dispatch(clearToken())
+      dispatch(clearUser())
       var auth_provider = "google-oidc"
       var login_url = producerLoginRedirectEndpoint + "?auth_provider=" + auth_provider
       window.location.href = login_url
@@ -364,9 +358,9 @@ function Header(props) {
               <DropdownToggle caret={false} nav>
                 <i className="nc-icon nc-circle-10" />
               </DropdownToggle>
-              {userLoggedIn ?
+              {(user !== null) && (user !== undefined)?
                 <DropdownMenu right>
-                  <DropdownItem tag="a"><Link to={{pathname: '/admin/user', state: userInfo}}>User Profile</Link> </DropdownItem>
+                  <DropdownItem tag="a"><Link to={{pathname: '/admin/user', state: user}}>User Profile</Link> </DropdownItem>
                   <DropdownItem tag="a" onClick={logout}>Logout</DropdownItem>
                 </DropdownMenu>:
                 <DropdownMenu right>
