@@ -66,7 +66,8 @@ function ChallengePM (){
         const response = await fetch(`http://${API_URL}/game/rm_game/get_user_account_info`, {
             method: 'GET',
             headers: {
-              'Content-Type': 'application/json'
+              'Content-Type': 'application/json',
+              "Authorization": user['access_token']
             },
             credentials: 'include'
           })
@@ -81,7 +82,8 @@ function ChallengePM (){
         const response = fetch(`http://${API_URL}/game/rm_game/get_transaction_history`, {
             method: 'GET',
             headers: {
-              'Content-Type': 'application/json'
+              'Content-Type': 'application/json',
+              "Authorization": user['access_token']
             },
             credentials: 'include'
           }).then(
@@ -107,7 +109,8 @@ function ChallengePM (){
         const response = fetch(`http://${API_URL}/game/rm_game/get_user_position`, {
             method: 'GET',
             headers: {
-              'Content-Type': 'application/json'
+              'Content-Type': 'application/json',
+              "Authorization": user['access_token']
             },
             credentials: 'include'
           }).then(

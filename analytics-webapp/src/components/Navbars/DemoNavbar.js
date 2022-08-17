@@ -72,7 +72,7 @@ function Header(props) {
   const producerLoginCheckEndpoint = `http://${API_URL}/user-session-status/`;
 
   const dispatch = useDispatch()
-  const user = useSelector(state => state.user)
+  var user = useSelector(state => state.user)
   
   React.useEffect(() => {
     authenticate();
@@ -166,11 +166,15 @@ function Header(props) {
       setUserStatus(data['userLoggedIn']);
       setUserInfo(data['userInfo'])
       if (data['userLoggedIn']){
-        dispatch(saveUser(data['userInfo']))
+        var userinfo = data['userInfo']
+        userinfo['access_token'] = authtoken
+        dispatch(saveUser(userinfo))
+        console.log(user)
       }
       else{
         console.log('clear user')
         dispatch(clearUser())
+        setUserStatus(false)
       }
       
     })

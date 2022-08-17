@@ -40,12 +40,12 @@ import {
 
 
 function User() {
-
+  const API_URL = process.env.REACT_APP_API_URL
   const [userProfile, setUserProfile] = useState()
   const [alertType, setAlertType] = useState(false);
   const [message, setMessage] = useState();
   const [isAlertVisible, setIsAlertVisible] = useState(false);
-  const user  = useSelector(state => state.users.user)
+  var user  = useSelector(state => state.users.user)
   const dispatch = useDispatch()
   React.useEffect(() => {
     if (user['internal_sub_id'] === undefined){
@@ -65,10 +65,11 @@ function onUserFileSubmit(e){
   e.preventDefault()
   console.log(userProfile)
   console.log(user)
-  fetch('http://localhost:8888/users/update_user_profile', {
+  fetch(`http://${API_URL}/users/update_user_profile`, {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      "Authorization": user['access_token']
     },
     credentials: 'include',
     body: JSON.stringify({
