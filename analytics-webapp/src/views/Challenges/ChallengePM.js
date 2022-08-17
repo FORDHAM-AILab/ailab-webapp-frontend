@@ -398,7 +398,8 @@ function ChallengePM (){
             fetch(`http://${API_URL}/game/rm_game/update_portfolio`, {
             method: 'POST',
             headers: {
-              'Content-Type': 'application/json'
+              'Content-Type': 'application/json',
+              "Authorization": user['access_token']
             },
             credentials: 'include',
             body: JSON.stringify({
