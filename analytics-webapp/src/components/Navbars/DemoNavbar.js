@@ -179,7 +179,10 @@ function Header(props) {
   const logout = () => {
     const request = {
       method: 'GET',
-      credentials: 'include'
+      credentials: 'include',
+      headers: {
+        "Authorization": access_token
+      }
     }
 
     fetch(producerLogoutEndpoint, request)
