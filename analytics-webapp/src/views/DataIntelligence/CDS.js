@@ -49,6 +49,13 @@ function CDSView() {
     .then((response) => response.json())
     .then((responseData) => {
       let result = responseData["result"];
+      if ((result == null) || (result == undefined)){
+        if (param == 'REGION'){
+          if(alert('Error: something is wrong with the database')){}
+          else    window.location.reload(); 
+        }
+        }
+
       let filterOptions = result.map((option)=> ({"value":option, "label":option}))
       SetCDSSpecsList((prevState) => ({
         ...prevState,

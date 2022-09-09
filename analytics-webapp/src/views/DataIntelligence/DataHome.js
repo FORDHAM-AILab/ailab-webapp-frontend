@@ -58,6 +58,7 @@ function DataDashboard() {
     .then((response) => response.json())
     .then((responseData) => {
       if (type === 'gainers'){
+          console.log(JSON.parse(responseData["result"]))
         setTopGainers(JSON.parse(responseData["result"]))
       }
       else{
@@ -264,6 +265,13 @@ function DataDashboard() {
                                 <NavLink href="/admin/data/data_warehouse/cds">
                                     <li>
                                         CDS Data
+                                    </li>
+                                </NavLink>
+                                </Row>
+                                <Row >
+                                <NavLink href="/admin/data/data_warehouse/esg">
+                                    <li>
+                                        ESG Data
                                     </li>
                                 </NavLink>
                                 </Row>

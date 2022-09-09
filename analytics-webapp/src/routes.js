@@ -27,6 +27,7 @@ import StockDataIntelligence from "views/DataIntelligence/DataStock.js"
 import DataDashboard  from "views/DataIntelligence/DataHome";
 import StockFullAnalytics from "views/Analytics/StockFullAnalytics";
 import CDSView from "views/DataIntelligence/CDS.js";
+import ESGView from "views/DataIntelligence/ESG.js";
 import ResearchHome from "views/Research/Research.js";
 import DataInfoSample from "views/Data/DataInfoSample";
 import ResearchInfoSample from "views/Research/SampleResearch";
@@ -99,6 +100,13 @@ var routes = [
     //icon: "nc-icon nc-diamond",
     layout: "/admin",
     component: CDSView
+  },
+  { 
+    path: "/data/data_warehouse/esg",
+    name: "ESG",
+    //icon: "nc-icon nc-diamond",
+    layout: "/admin",
+    component: ESGView  
   },
 
   { 

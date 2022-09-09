@@ -78,6 +78,46 @@ function ChallengePM (){
         )
     }
 
+
+    async function get_historical_records(){
+
+        /*
+            get historical records for the current user
+        */
+
+        fetch(`http://${API_URL}/game/rm_game/get_historical_records`, {
+            method: 'GET',
+            // include the following authorization header and credentials: 'include' for APIs that requires
+            // user log-in authentication (i.e. that needs to know who that user is)
+            headers: {
+              'Content-Type': 'application/json',
+              "Authorization": access_token
+            },
+            credentials: 'include'
+        })
+        .then()
+        .then()
+        
+    }
+
+
+    async function get_historical_records_all(){
+        fetch(`http://${API_URL}/game/rm_game/get_historical_net_account_value`, {
+            method: 'GET',
+            // include the following authorization header and credentials: 'include' for APIs that requires
+            // user log-in authentication (i.e. that needs to know who that user is)
+            headers: {
+              'Content-Type': 'application/json',
+              "Authorization": access_token
+            },
+            credentials: 'include'
+        })
+        .then()
+        .then()
+        
+    }
+
+
     async function get_user_account_info(){
         const response = await fetch(`http://${API_URL}/game/rm_game/get_user_account_info`, {
             method: 'GET',

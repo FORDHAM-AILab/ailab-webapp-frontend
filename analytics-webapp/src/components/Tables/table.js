@@ -71,3 +71,4 @@ const RenderRow = (props) =>{
     return <td key={index}>{props.data[key]}</td>
   })
 }
+
