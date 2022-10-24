@@ -57,6 +57,7 @@ function CDSView() {
         }
 
       let filterOptions = result.map((option)=> ({"value":option, "label":option}))
+      console.log(filterOptions)
       SetCDSSpecsList((prevState) => ({
         ...prevState,
         [param]: filterOptions
@@ -74,7 +75,9 @@ function CDSView() {
         },
         body: JSON.stringify(cds_specs)
       }).then((response) => response.json()).then(
-        (responseJSON) => {SetCDSData(JSON.parse(responseJSON["result"]));}
+        
+        (responseJSON) => {
+          SetCDSData(responseJSON["result"]);}
       )
   }
 
