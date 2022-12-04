@@ -64,10 +64,10 @@ function Header(props) {
   };
 
   const API_URL = process.env.REACT_APP_API_URL
-  const producerLoginRedirectEndpoint= `http://${API_URL}/login-redirect`;
-  const producerLoginEndpoint = `http://${API_URL}/login/`;
-  const producerLogoutEndpoint = `http://${API_URL}/logout/`;
-  const producerLoginCheckEndpoint = `http://${API_URL}/user-session-status/`;
+  const producerLoginRedirectEndpoint= `${API_URL}/login-redirect`;
+  const producerLoginEndpoint = `${API_URL}/login/`;
+  const producerLogoutEndpoint = `${API_URL}/logout/`;
+  const producerLoginCheckEndpoint = `${API_URL}/user-session-status/`;
 
   const dispatch = useDispatch()
   var user = useSelector(state => state.users.user)

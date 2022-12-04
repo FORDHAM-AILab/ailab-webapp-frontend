@@ -66,7 +66,7 @@ function onUserFileSubmit(e){
   e.preventDefault()
   console.log(userProfile)
   console.log(user)
-  fetch(`http://${API_URL}/users/update_user_profile`, {
+  fetch(`${API_URL}/users/update_user_profile`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

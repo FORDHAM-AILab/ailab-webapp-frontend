@@ -54,7 +54,7 @@ function DataDashboard() {
 
 
   function get_top_gainers_or_losers(type){
-    fetch(`http://${API_URL}/data/stock/get_top_${type}/${time_range}`)
+    fetch(`${API_URL}/data/stock/get_top_${type}/${time_range}`)
     .then((response) => response.json())
     .then((responseData) => {
       if (type === 'gainers'){

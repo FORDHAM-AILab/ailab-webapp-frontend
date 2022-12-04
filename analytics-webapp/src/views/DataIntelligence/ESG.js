@@ -25,7 +25,7 @@ function ESGView() {
       if (param == 'CREDIT_EVENTS'){
         setIsLoading(true)
       }
-      fetch(`http://${API_URL}/data/data_warehouse/cds_get_unique_val/${param}`)
+      fetch(`${API_URL}/data/data_warehouse/cds_get_unique_val/${param}`)
       .then((response) => response.json())
       .then((responseData) => {
         let result = responseData["result"];
@@ -47,7 +47,7 @@ function ESGView() {
   
     async function get_cds_data(){
       console.log("Fetching data start")
-      const result = fetch(`http://${API_URL}/data/data_warehouse/get_cds_data`, {
+      const result = fetch(`${API_URL}/data/data_warehouse/get_cds_data`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'

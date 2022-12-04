@@ -183,7 +183,7 @@ function OptionsAnalysis() {
 
   async function get_options_expiration_dates (ticker) {
     
-    let request_url = `http://${API_URL}/options/get_options_expiration_date/${ticker}`;
+    let request_url = `${API_URL}/options/get_options_expiration_date/${ticker}`;
     const response = await fetch(request_url);
     const data = await response.json();
     const result = data["result"]
@@ -193,7 +193,7 @@ function OptionsAnalysis() {
 
   async function get_options_data (ticker, date, options_type) {
     
-    let request_url = `http://${API_URL}/options/get_options_data_api`;
+    let request_url = `${API_URL}/options/get_options_data_api`;
     const response = await fetch(request_url, {
       method: 'POST',
       headers: {
@@ -213,7 +213,7 @@ function OptionsAnalysis() {
 
 
   async function option_pricing (specs) {
-    let request_url = `http://${API_URL}/options/options_pricing`;
+    let request_url = `${API_URL}/options/options_pricing`;
     console.log(JSON.stringify(specs))
     const response = await fetch(request_url, {
       method: 'POST',

@@ -44,7 +44,7 @@ function StockAnalysis() {
   const [stock_price_full_data, setStockPriceFullData] = useState([])
   const API_URL = process.env.REACT_APP_API_URL
   function get_analysis_info(){
-    fetch(`http://${API_URL}/stock/get_analysis_info/${ticker}`)
+    fetch(`${API_URL}/stock/get_analysis_info/${ticker}`)
     .then((response) => response.json())
     .then((responseData) => {
       let result = {};
@@ -65,7 +65,7 @@ function StockAnalysis() {
       return data
     }
 
-    const response = fetch(`http://${API_URL}/data/load_single_hist_stock_price/${ticker}/2017-01-01/2020-02-02`)
+    const response = fetch(`${API_URL}/data/load_single_hist_stock_price/${ticker}/2017-01-01/2020-02-02`)
     .then((response) => response.text())
     .then((data) => parseData(JSON.parse(JSON.parse(data)["result"])))
     return response

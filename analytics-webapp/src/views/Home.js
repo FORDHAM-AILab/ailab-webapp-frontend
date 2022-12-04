@@ -47,7 +47,7 @@ function Home() {
   const API_URL = process.env.REACT_APP_API_URL
   console.log(API_URL)
   function get_top_gainers_or_losers(type){
-    fetch(`http://${API_URL}/home/get_top_${type}/${time_range}`)
+    fetch(`${API_URL}/home/get_top_${type}/${time_range}`)
     .then((response) => response.json())
     .then((responseData) => {
       if (type === 'gainers'){

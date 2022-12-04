@@ -69,7 +69,7 @@ function ChallengePM (){
       }, [isLoading]);
 
     async function get_rank(by){
-        fetch(`http://${API_URL}/game/rm_game/rank_players_rm/${by}`)
+        fetch(`${API_URL}/game/rm_game/rank_players_rm/${by}`)
         .then(res => res.json())
         .then(
             (result) => {
@@ -85,7 +85,7 @@ function ChallengePM (){
             get historical records for the current user
         */
 
-        fetch(`http://${API_URL}/game/rm_game/get_historical_records`, {
+        fetch(`${API_URL}/game/rm_game/get_historical_records`, {
             method: 'GET',
             // include the following authorization header and credentials: 'include' for APIs that requires
             // user log-in authentication (i.e. that needs to know who that user is)
@@ -102,7 +102,7 @@ function ChallengePM (){
 
 
     async function get_historical_records_all(){
-        fetch(`http://${API_URL}/game/rm_game/get_historical_net_account_value`, {
+        fetch(`${API_URL}/game/rm_game/get_historical_net_account_value`, {
             method: 'GET',
             // include the following authorization header and credentials: 'include' for APIs that requires
             // user log-in authentication (i.e. that needs to know who that user is)
@@ -119,7 +119,7 @@ function ChallengePM (){
 
 
     async function get_user_account_info(){
-        const response = await fetch(`http://${API_URL}/game/rm_game/get_user_account_info`, {
+        const response = await fetch(`${API_URL}/game/rm_game/get_user_account_info`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -135,7 +135,7 @@ function ChallengePM (){
 
     async function get_transactions(){
         
-        const response = fetch(`http://${API_URL}/game/rm_game/get_transaction_history`, {
+        const response = fetch(`${API_URL}/game/rm_game/get_transaction_history`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -162,7 +162,7 @@ function ChallengePM (){
 
     async function get_positions(){
         
-        const response = fetch(`http://${API_URL}/game/rm_game/get_user_position`, {
+        const response = fetch(`${API_URL}/game/rm_game/get_user_position`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -214,7 +214,7 @@ function ChallengePM (){
                                     <hr/>
                                     <Col>
                                     <Row>
-                                        <Button onClick={() => fetch(`http://${API_URL}/game/rm_game/create_rm_game_user`, {
+                                        <Button onClick={() => fetch(`${API_URL}/game/rm_game/create_rm_game_user`, {
                                                 method: 'POST',
                                                 credentials: 'include',
                                                 headers: {
@@ -456,7 +456,7 @@ function ChallengePM (){
         async function handleSubmit(e){
             e.preventDefault();
             setIsLoading(true)
-            fetch(`http://${API_URL}/game/rm_game/update_portfolio`, {
+            fetch(`${API_URL}/game/rm_game/update_portfolio`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

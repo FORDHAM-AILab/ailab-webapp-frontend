@@ -45,7 +45,7 @@ function CDSView() {
     if (param == 'CREDIT_EVENTS'){
       setIsLoading(true)
     }
-    fetch(`http://${API_URL}/data/data_warehouse/cds_get_unique_val/${param}`)
+    fetch(`${API_URL}/data/data_warehouse/cds_get_unique_val/${param}`)
     .then((response) => response.json())
     .then((responseData) => {
       let result = responseData["result"];
@@ -55,7 +55,7 @@ function CDSView() {
           else    window.location.reload(); 
         }
         }
-
+      console.log('please!')
       let filterOptions = result.map((option)=> ({"value":option, "label":option}))
       console.log(filterOptions)
       SetCDSSpecsList((prevState) => ({
@@ -67,8 +67,8 @@ function CDSView() {
   }
 
   async function get_cds_data(){
-    console.log("Fetching data start")
-    const result = fetch(`http://${API_URL}/data/data_warehouse/get_cds_data`, {
+    console.log("Fetching data start!!!")
+    const result = fetch(`${API_URL}/data/data_warehouse/get_cds_data`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
