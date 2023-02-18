@@ -1,3 +1,3 @@
 # ailab-webapp-frontend
  
-Front end of the QF AI Lab analytics webapp using React.
+Front end of the Fordham MSQF AI Lab webapp.
