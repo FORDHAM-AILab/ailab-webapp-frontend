@@ -49,6 +49,7 @@ function CDSView() {
     .then((response) => response.json())
     .then((responseData) => {
       let result = responseData["result"];
+      console.log(result)
       if ((result == null) || (result == undefined)){
         if (param == 'REGION'){
           if(alert('Error: something is wrong with the database')){}
