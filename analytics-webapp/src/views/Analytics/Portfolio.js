@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Stock_info_form from "components/Forms/FetchStockData.js";
-import {StockPriceChart} from "variables/charts.js" ;
+import {MyChart} from "variables/my_chart.js" ;
 import { SwitchTab } from "components/Switch/ToggleSwitch";
 import Csv_reader from "utils/data.js"
 import DynamicTable from "components/Tables/table.js"
 import {ButtonDropdown, DropdownItem, DropdownMenu, DropdownToggle, Form, FormGroup, Label, Input, Button, CardSubtitle, CardColumns} from "reactstrap";
-import TSNE from 'tsne-js';
+// import TSNE from 'tsne-js';
 
 // reactstrap components
 import { Card, CardHeader, CardBody, CardTitle, Row, Col } from "reactstrap";
@@ -29,6 +29,7 @@ function PortfolioAnalysis() {
   //   upLoadFile(event.target.files[0])
   // }
 
+  const Classic20 = ['#1f77b4', '#aec7e8', '#ff7f0e', '#ffbb78', '#2ca02c', '#98df8a', '#d62728', '#ff9896', '#9467bd', '#c5b0d5', '#8c564b', '#c49c94', '#e377c2', '#f7b6d2', '#7f7f7f', '#c7c7c7', '#bcbd22', '#dbdb8d', '#17becf', '#9edae5'];
 
 
   function chart_data_parser(data){
@@ -51,6 +52,7 @@ function PortfolioAnalysis() {
         pointRadius: 0,
         pointHoverRadius: 0,
         borderWidth: 3,
+        borderColor: Classic20[i],
         tension: 0.4,
         fill: false,
         data: data[Object.keys(data)[i]]};
@@ -64,6 +66,7 @@ function PortfolioAnalysis() {
 
 
   function handleOnComplete (data) {
+    // handle csv data upload
     let parsed_data = {};
     for (let i = 0; i < data["data"].length; i++){
       if (i ==0){
@@ -379,7 +382,7 @@ function PortfolioAnalysis() {
         <Col md="12">
             <Card>
               <CardBody>
-                <StockPriceChart stock_data={stock_data} />
+                <MyChart chartdata={stock_data} />
               </CardBody>
             </Card>
         </Col>

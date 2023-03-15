@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Stock_info_form from "components/Forms/FetchStockData.js";
-import {StockPriceChart} from "variables/charts.js" ;
+import {MyChart} from "variables/my_chart.js" ;
 import { SwitchTab } from "components/Switch/ToggleSwitch";
 import Csv_reader from "utils/data.js"
 
@@ -123,7 +123,7 @@ function SentimentAnalysis() {
         <Col md="12">
             <Card>
               <CardBody>
-                <StockPriceChart stock_data={stock_data} />
+                <MyChart chartdata={stock_data} />
               </CardBody>
             </Card>
         </Col>

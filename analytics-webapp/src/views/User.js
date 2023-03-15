@@ -53,6 +53,8 @@ function User() {
       window.location = '/admin/home'
     }
     setUserProfile(user)
+    console.log(userProfile)
+    console.log(user)
   }, [])
 
   useEffect(() => {
@@ -80,9 +82,9 @@ function onUserFileSubmit(e){
   .then(res => res.json())
   .then(
       (result) => {
-        if (result['status'] == 0){
+        if (result['status_code'] < 400){
             setAlertType('success')
-            setMessage(`Update succeed!`)
+            setMessage(`${result['message']}`)
             setIsAlertVisible(true)
             dispatch(updateUser(userProfile))
           }
@@ -96,8 +98,10 @@ function onUserFileSubmit(e){
   )
 }
 
-  return (
-    <>
+function ShowUser(){
+  if (user != null && user != undefined){
+    return (
+      <>
       <div className="content">
       <div style={{ position: "fixed", top: 0, left: 259, right: 0, zIndex: 2000}}>
                             <Alert color={alertType} isOpen={isAlertVisible} toggle={() => setIsAlertVisible(false)}>
@@ -121,7 +125,7 @@ function onUserFileSubmit(e){
                       className="avatar border-gray"
                       src={require("assets/img/Enrico-Fermi-Italian-problem-physics-1950.jpeg").default}
                     />
-                    <h5 className="title">{user['username']}</h5>
+                    <h5 className="title">{user != null? user['username']: "Not logged in"}</h5>
                   </a>
                 </div>
                 <p className="description text-center">
@@ -176,7 +180,7 @@ function onUserFileSubmit(e){
                 <CardTitle tag="h5">Edit Profile</CardTitle>
               </CardHeader>
               <CardBody>
-              <Form onSubmit={(e) => {onUserFileSubmit(e)}} onChange={(e) => {setUserProfile(prev => ({...prev, [e.target.name]: e.target.value}))}}>
+              <Form onSubmit={(e) => {onUserFileSubmit(e)}} onChange={(e) => {console.log(userProfile); setUserProfile(prev => ({...prev, [e.target.name]: e.target.value}))}}>
                   <Row>
                     <Col className="pr-1" md="3">
                       <FormGroup >
@@ -294,7 +298,18 @@ function onUserFileSubmit(e){
         </Row>
       </div>
     </>
-  );
+    )
+  }
+  else{
+    return (
+      <>
+      <p>Please log in to view your records</p>
+      </>
+    )
+  }
+}
+
+   return ShowUser()
 }
 
 export default User;

@@ -33,7 +33,9 @@ function CDSView() {
   const [expiration_list, SetExpirationList] = useState([])
   const [expiration_date, SetExpirationDate] = useState()
   const [options_type, SetOptionsType] = useState("")
+  // storing the selected specs by user
   const [cds_specs, SetCDSDataSpecs] = useState({"REGION": [], "INDUSTRY": [], "OBLIGATION_ASSETRANK":[], "CREDIT_EVENTS": [], "limit": 100})
+  // storing the unique value user to select from
   const [cds_specs_list, SetCDSSpecsList] = useState({"REGION": [], "INDUSTRY": [], "OBLIGATION_ASSETRANK":[], "CREDIT_EVENTS": []})
   const [cds_data, SetCDSData] = useState()
   const [data_requested, SetDataRequested] = useState(false)
@@ -56,7 +58,6 @@ function CDSView() {
           else    window.location.reload(); 
         }
         }
-      console.log('please!')
       let filterOptions = result.map((option)=> ({"value":option, "label":option}))
       console.log(filterOptions)
       SetCDSSpecsList((prevState) => ({
@@ -82,15 +83,10 @@ function CDSView() {
       )
   }
 
-  async function set_params(){
-    Object.keys(cds_specs_list).map((key,index)=>(
-      fetch_cds_param_values(key)
-  ))
-  }
-
 
   useEffect(()=>{
-    set_params()
+    Object.keys(cds_specs_list).map((key,index)=>(
+      fetch_cds_param_values(key)))
   }, [])
 
   function CDSFilter(param){
@@ -116,7 +112,6 @@ function CDSView() {
   }
 
   function CDSDataForm () {
-    console.log(cds_specs)
     return (
       <div>
       <Form  onSubmit={(e) => {e.preventDefault(); SetCDSData(null); get_cds_data(); SetDataRequested(true)}}>

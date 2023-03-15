@@ -25,6 +25,7 @@ import Settings from "views/Settings.js";
 import Analysis from "views/Analytics/Analysis.js"
 import StockDataIntelligence from "views/DataIntelligence/DataStock.js"
 import DataDashboard  from "views/DataIntelligence/DataHome";
+import DataIntegration from "views/DataIntelligence/DataIntegration.js"
 import StockFullAnalytics from "views/Analytics/StockFullAnalytics";
 import CDSView from "views/DataIntelligence/CDS.js";
 import ESGView from "views/DataIntelligence/ESG.js";
@@ -108,6 +109,15 @@ var routes = [
     layout: "/admin",
     component: ESGView  
   },
+  {
+    path: "/data/data_warehouse/integrator",
+    name: "Data Integrator",
+    //icon: "nc-icon nc-tile-56",
+    component: DataIntegration,
+    layout: "/admin",
+  },
+
+
 
   { 
     path: "/analysis",
@@ -152,6 +162,7 @@ var routes = [
     component: DataInfoSample,
     layout: "/admin",
   },
+
   
   {
     path: "/options",

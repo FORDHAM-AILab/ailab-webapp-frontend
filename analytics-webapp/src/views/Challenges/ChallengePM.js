@@ -471,7 +471,7 @@ function ChallengePM (){
           .then(
               (result) => {
                     setIsLoading(false)
-                if (result['status'] == 0){
+                if (result['status_code'] < 400){
                     setAlertType('success')
                     setMessage(`Transaction succeed!`)
                     setIsAlertVisible(true)
