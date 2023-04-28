@@ -155,6 +155,7 @@ function DataIntegration() {
       if (!(selected_tables.includes(key))){
         const copy_selected_cols = {...selected_table_cols}
         delete copy_selected_cols[key]
+        console.log(copy_selected_cols)
         SetSelectedTableCols(copy_selected_cols)
       }
     }
@@ -278,6 +279,13 @@ function DataIntegration() {
 
   async function get_integrated_data(){
     setIsLoading(true);
+    console.log(selected_table_cols)
+    for (const [key, value] of Object.entries(selected_table_cols)){
+        selected_table_cols[key] = value.map(function (item) {
+        return item.split("--")[0].trim()
+      })
+    }
+    
     const result = fetch(`${API_URL}/data/data_warehouse/get_integrated_data`, {
         method: 'POST',
         headers: {
@@ -306,7 +314,8 @@ function DataIntegration() {
             SetData(null)
             SetChartData(null)
             setAlertType('danger')
-            setMessage(`Failed. ${responseJSON['message']}. Detailed message: ${responseJSON["debug"]}`)
+            //setMessage(`Failed. ${responseJSON['message']}. Detailed message: ${responseJSON["debug"]}`)
+            setMessage(`Failed. ${responseJSON['message']}`)
             setIsAlertVisible(true)
           }
           }
@@ -378,7 +387,7 @@ function DataIntegration() {
     <LoadingOverlay 
     active={isLoading}
     spinner
-    text='Loading params'
+    text='Loading'
     >
     <div className="content">
       <div style={{ position: "fixed", top: 0, left: 259, right: 0, zIndex: 2000 }}>

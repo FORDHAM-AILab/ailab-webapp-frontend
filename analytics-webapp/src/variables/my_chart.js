@@ -107,9 +107,9 @@ export function chart_data_parser(data){
     labels = data["Date"];
     delete data["Date"];
   }
-  else if ("Date_General" in data){
-      labels = data['Date_General']
-      delete data['Date_General']
+  else if ("datadate" in data){
+      labels = data['datadate']
+      delete data['datadate']
   }
   else{
     labels = [...Array(Object.keys(data).length).keys()];
