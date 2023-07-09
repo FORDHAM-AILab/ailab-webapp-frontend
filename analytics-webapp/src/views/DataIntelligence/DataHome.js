@@ -21,6 +21,7 @@ import DynamicTable from "components/Tables/table";
 // react plugin used to create charts
 import { Line, Pie } from "react-chartjs-2";
 import classnames from 'classnames';
+import { Button as AButton, Form as AForm, Input as AInput, Space as ASpace, Switch} from 'antd';
 
 // reactstrap components
 import {
@@ -51,17 +52,17 @@ function DataDashboard() {
   const [activeTab, setActiveTab] = useState('1');
   const time_range = 'daily';
   const API_URL = process.env.REACT_APP_API_URL
-
+  const { Search } = AInput;
 
   function get_top_gainers_or_losers(type){
     fetch(`${API_URL}/data/stock/get_top_${type}/${time_range}`)
     .then((response) => response.json())
     .then((responseData) => {
       if (type === 'gainers'){
-        setTopGainers(JSON.parse(responseData["result"]))
+        setTopGainers(JSON.parse(responseData['content']))
       }
       else{
-        setTopLosers(JSON.parse(responseData["result"]))
+        setTopLosers(JSON.parse(responseData['content']))
       }
     }).catch(error => console.warn(error))
   }
@@ -241,8 +242,15 @@ function DataDashboard() {
                             </CardHeader>
                             <CardBody>
                                 <Form>
-                                    <Input>Search datasets</Input>
-                                    <Button>Search</Button><br/>
+                                    <Search
+                                    placeholder="Search datasets"
+                                    allowClear
+                                    size="large"
+                                    // onSearch={onSearch}
+                                    // style={{
+                                    //     width: 200,
+                                    // }}
+                                    />
                                     
                                 </Form>
                                 <Button>New Dataset</Button>
@@ -256,7 +264,7 @@ function DataDashboard() {
                         <Card>
                             <CardHeader>
                             <CardTitle>
-                                <CardTitle tag="h4">Analytical Datasets</CardTitle>
+                                <CardTitle tag="h4">Databases</CardTitle>
                             </CardTitle>
                             </CardHeader>
                             <CardBody>
@@ -297,7 +305,7 @@ function DataDashboard() {
                                 <Row >
                                 <NavLink href="https://wrds-www.wharton.upenn.edu/">
                                     <li>
-                                        wrds
+                                        WRDS
                                     </li>
                                 </NavLink>
                                 </Row>
@@ -317,7 +325,13 @@ function DataDashboard() {
                                 <Row >
                                 <NavLink href="/admin/data/sampledata">
                                     <li>
-                                        Sample data
+                                        Sampledata.csv
+                                    </li>
+                                    <li>
+                                        Sampledata.csv
+                                    </li>
+                                    <li>
+                                        Sampledata.csv
                                     </li>
                                 </NavLink>
                                 </Row>

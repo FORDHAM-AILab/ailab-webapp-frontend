@@ -48,7 +48,7 @@ function StockAnalysis() {
     .then((response) => response.json())
     .then((responseData) => {
       let result = {};
-      for (const [key,value] of Object.entries(responseData["result"])){
+      for (const [key,value] of Object.entries(responseData["content"])){
         result[key] = JSON.parse(value)
       }
       setAnalysisInfo(result)
@@ -57,7 +57,7 @@ function StockAnalysis() {
 
   function get_stock_price_full_data (){
     function parseData(data) {
-      console.log(data[0])
+      console.log(data)
       for (var i = 0; i < data.length; i++){
         data[i]["date"] = timeParse("%Y-%m-%d")(data[i]["date"])
       }
@@ -66,8 +66,8 @@ function StockAnalysis() {
     }
 
     const response = fetch(`${API_URL}/data/load_single_hist_stock_price/${ticker}/2017-01-01/2020-02-02`)
-    .then((response) => response.text())
-    .then((data) => parseData(JSON.parse(JSON.parse(data)["result"])))
+    .then((response) => response.json())
+    .then((data) => parseData(JSON.parse(data["content"])))
     return response
   }
 
@@ -148,7 +148,7 @@ function StockAnalysis() {
       <Row>
         <Col md="12">
           <Card>
-            <CardHeader>Graph</CardHeader>
+            <CardHeader><CardTitle tag='h5'>Graph</CardTitle></CardHeader>
             <CardBody>
               {StockChartComponent()}
             </CardBody>
@@ -158,7 +158,7 @@ function StockAnalysis() {
       <Row>
         <Col md="12">
           <Card>
-            <CardHeader>News</CardHeader>
+            <CardHeader><CardTitle tag='h5'>News</CardTitle></CardHeader>
             <CardBody>
               
             </CardBody>
@@ -168,7 +168,7 @@ function StockAnalysis() {
       <Row>
         <Col md="12">
           <Card>
-            <CardHeader>Earning Analysis</CardHeader>
+            <CardHeader><CardTitle tag='h5'>Earning Analysis</CardTitle></CardHeader>
             <CardBody>
               {BasicAnalysis('Earnings Estimate')}
             </CardBody>
@@ -178,7 +178,7 @@ function StockAnalysis() {
       <Row>
         <Col md="12">
           <Card>
-            <CardHeader>Revenue Estimate</CardHeader>
+            <CardHeader><CardTitle tag='h5'>Revenue Estimate</CardTitle></CardHeader>
             <CardBody>
               {BasicAnalysis('Revenue Estimate')}
             </CardBody>
@@ -188,7 +188,7 @@ function StockAnalysis() {
       <Row>
         <Col md="12">
           <Card>
-            <CardHeader>Earnings History</CardHeader>
+            <CardHeader><CardTitle tag='h5'>Earnings History</CardTitle></CardHeader>
             <CardBody>
               {BasicAnalysis('Earnings History')}
             </CardBody>
@@ -198,7 +198,7 @@ function StockAnalysis() {
       <Row>
         <Col md="12">
           <Card>
-            <CardHeader>EPS Trend</CardHeader>
+            <CardHeader><CardTitle tag='h5'>EPS Trend</CardTitle></CardHeader>
             <CardBody>
               {BasicAnalysis('EPS Trend')}
             </CardBody>
@@ -208,7 +208,7 @@ function StockAnalysis() {
       <Row>
         <Col md="12">
           <Card>
-            <CardHeader>Growth Estimates</CardHeader>
+            <CardHeader><CardTitle tag='h5'>Growth Estimates</CardTitle></CardHeader>
             <CardBody>
               {BasicAnalysis('Growth Estimates')}
             </CardBody>

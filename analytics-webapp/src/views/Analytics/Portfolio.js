@@ -291,7 +291,7 @@ function PortfolioAnalysis() {
     })
 
     const result = await response.json();
-    const parsed = JSON.parse(result["result"])
+    const parsed = JSON.parse(result["content"])
     setBasicInfo(parsed);
     console.log(parsed);
     return parsed
@@ -311,8 +311,7 @@ function PortfolioAnalysis() {
         alpha: var_alpha,
       })
     }).then((response) => response.json()).then(
-      (responseJSON) => {setValueatrisk(responseJSON["result"]);
-      console.log(responseJSON["result"])}
+      (responseJSON) => setValueatrisk(responseJSON["content"])
     )
   }
   

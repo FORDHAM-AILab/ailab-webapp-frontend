@@ -50,16 +50,14 @@ function CDSView() {
     fetch(`${API_URL}/data/data_warehouse/cds_get_unique_val/${param}`)
     .then((response) => response.json())
     .then((responseData) => {
-      let result = responseData["result"];
-      console.log(result)
-      if ((result == null) || (result == undefined)){
+      let result = responseData["content"];
+      if ((result == null) || (result == undefined) || result['status_code']>=400){
         if (param == 'REGION'){
           if(alert('Error: something is wrong with the database')){}
-          else    window.location.reload(); 
+          //else    window.location.reload(); 
         }
         }
       let filterOptions = result.map((option)=> ({"value":option, "label":option}))
-      console.log(filterOptions)
       SetCDSSpecsList((prevState) => ({
         ...prevState,
         [param]: filterOptions
@@ -79,7 +77,8 @@ function CDSView() {
       }).then((response) => response.json()).then(
         
         (responseJSON) => {
-          SetCDSData(responseJSON["result"]);}
+          console.log(responseJSON)
+          SetCDSData(responseJSON["content"]);}
       )
   }
 
@@ -112,7 +111,7 @@ function CDSView() {
   }
 
   function CDSDataForm () {
-    return (
+      return (
       <div>
       <Form  onSubmit={(e) => {e.preventDefault(); SetCDSData(null); get_cds_data(); SetDataRequested(true)}}>
         {CDSFilter("REGION")}

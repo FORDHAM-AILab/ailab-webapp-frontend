@@ -66,7 +66,7 @@ function Analysis (){
             <Card>
                 <CardHeader>
                 <CardTitle>
-                    <CardTitle tag="h4">Links</CardTitle>
+                    <CardTitle tag="h4">Hosted Services</CardTitle>
                 </CardTitle>
                 </CardHeader>
                 <CardBody>

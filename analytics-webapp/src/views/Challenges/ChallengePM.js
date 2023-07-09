@@ -10,6 +10,11 @@ import { useHistory } from 'react-router'
 import { saveUser, clearUser } from "reducers/cache_user";
 import { Alert } from 'reactstrap';
 import LoadingOverlay from 'react-loading-overlay';
+import { Button as AButton, Form as AForm, Input as AInput, Space as ASpace, Switch} from 'antd';
+import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import { CheckOutlined } from '@ant-design/icons';
+
+
 
 // reactstrap components
 import {
@@ -27,7 +32,6 @@ import Form from 'react-bootstrap/Form';
 
 function ChallengePM (){
     const [rank, setRank] = useState();
-    const [order, setOrder] = useState();
     const [accountInfo, setAccountInfo] = useState();
     const [transactions, setTransactions] = useState();
     const [positions, setPositions] = useState();
@@ -73,7 +77,8 @@ function ChallengePM (){
         .then(res => res.json())
         .then(
             (result) => {
-                setRank(result['result'])
+                
+                setRank(result['content'])
             }
         )
     }
@@ -129,7 +134,7 @@ function ChallengePM (){
           })
       
           const result = await response.json();
-          setAccountInfo(result['result'])   
+          setAccountInfo(result['content'])   
     }
 
 
@@ -156,7 +161,7 @@ function ChallengePM (){
                         setPositions(null)
                 }}  
                 })
-            .then(data => {setTransactions(data['result'])})
+            .then(data => {setTransactions(data['content'])})
             .catch((e) => {console.log(e)})
     }
 
@@ -171,6 +176,7 @@ function ChallengePM (){
             credentials: 'include'
           }).then(
               response => {
+                
                 if (response.ok){
                     return response.json()
                 }
@@ -183,7 +189,7 @@ function ChallengePM (){
                         setPositions(null)
                 }}  
                 })
-            .then(data => {setPositions(data['result'])})
+            .then(data => {setPositions(data['content'])})
             .catch((e) => {console.log(e)})
     }
 
@@ -234,8 +240,7 @@ function ChallengePM (){
                                                     }
                                                 }
                                             ).then(data => {
-                                                if (data['status'] == 0){
-                                                    console.log('here')
+                                                if (data['status_code'] < 400){
                                                     setAlertType('success')
                                                     setMessage(`You have joined the game successfully!`)
                                                     setIsAlertVisible(true)
@@ -351,7 +356,7 @@ function ChallengePM (){
                                         </CardHeader>
                                         <CardBody>
                                             <div style={{
-                                                        height: '400px',
+                                                        height: '200px',
                                                         //maxWidth: `6in`,
                                                         overflowY: 'auto',
                                                         overflowX: 'auto'
@@ -382,7 +387,7 @@ function ChallengePM (){
                                             <CardTitle tag="h5">Transaction History</CardTitle>
                                         </CardHeader>
                                         <CardBody>
-                                            {Transactions(400)}
+                                            {Transactions(200)}
                                         </CardBody>
                                     </Card>
                                 </Col>
@@ -424,7 +429,12 @@ function ChallengePM (){
             }
         }
 
+
     }
+
+    const onFinish = (values) => {
+        console.log('Received values of form:', values);
+      };
 
 
     function Transactions(height){
@@ -453,9 +463,23 @@ function ChallengePM (){
 
 
     function OrderForm(){
-        async function handleSubmit(e){
-            e.preventDefault();
+        const handleSubmit = (e) => {
+            //e.preventDefault();
             setIsLoading(true)
+            // var values = order.filter(v=> v!=null);
+            var order_dict ={};
+            e = e['orders'];
+            // for (var i =0; i < values.length; i++){
+            //     if (values[i]['ticker'] in order_dict) order_dict[values[i]['ticker']] += values[i]['quantity'] * values[i]['buy'];
+            //     else order_dict[values[i]['ticker']] = values[i]['quantity'] * values[i]['buy'];
+            // }
+            for (var i =0; i < e.length; i++){
+                const buy = e[i]['buy']?1:-1;
+                if (e[i]['ticker'] in order_dict) order_dict[e[i]['ticker']] += e[i]['quantity'] * buy;
+                else order_dict[e[i]['ticker']] = e[i]['quantity'] * buy;
+            }
+            console.log(e)
+            console.log(order_dict);
             fetch(`${API_URL}/game/rm_game/update_portfolio`, {
             method: 'POST',
             headers: {
@@ -464,12 +488,13 @@ function ChallengePM (){
             },
             credentials: 'include',
             body: JSON.stringify({
-              transactions:order
+              transactions:order_dict
             })
           })
           .then(res => res.json())
           .then(
               (result) => {
+                    console.log(result)
                     setIsLoading(false)
                 if (result['status_code'] < 400){
                     setAlertType('success')
@@ -478,7 +503,7 @@ function ChallengePM (){
                   }
                   else{
                     setAlertType('danger')
-                    setMessage(`Failed. ${result['message']}`)
+                    setMessage(`Failed. ${result['detail']}`)
                     setIsAlertVisible(true)
                   }
               }
@@ -486,19 +511,92 @@ function ChallengePM (){
         }
         
         return (
-            <Form onSubmit = {handleSubmit} className = 'settings'>
-            <Form.Group className="mb-3">
-                <Form.Control 
-                  name="order" type="textarea" placeholder='{"AAPL":5, "TSLA":8}'             
-                  value={order}
-                  onChange={e => setOrder(e.target.value)}/>
-            </Form.Group>
+        //     <Form onSubmit = {handleSubmit} className = 'settings'>
+        //     <Form.Group className="mb-3">
+        //         <Form.Control 
+        //           name="order" type="textarea" placeholder='{"AAPL":5, "TSLA":8}'             
+        //           value={order}
+        //           onChange={e => setOrder(e.target.value)}/>
+        //     </Form.Group>
 
 
-            <Button variant="primary" type="submit">
-              Submit
-            </Button>
-          </Form>
+        //     <Button variant="primary" type="submit">
+        //       Submit
+        //     </Button>
+        //   </Form>
+            <AForm
+                name="dynamic_form_nest_item"
+                onFinish={handleSubmit}
+                style={{
+                maxWidth: 600,
+                }}
+                autoComplete="off"
+            >
+                <AForm.List name="orders">
+                {(fields, { add, remove }) => (
+                    <>
+                    {fields.map(({ key, name, ...restField }) => (
+                        <ASpace
+                        key={key}
+                        style={{
+                            display: 'flex',
+                            marginBottom: 8,
+                        }}
+                        align="baseline"
+                        >
+                        <AForm.Item
+                        {...restField}
+                        name={[name, 'ticker']}
+                        rules={[
+                        {
+                            required: true,
+                            message: 'Missing ticker symbol',
+                        },
+                        ]}
+                        >
+                            <AInput placeholder="Ticker" />
+                        </AForm.Item>
+                        <AForm.Item
+                            {...restField}
+                            name={[name, 'quantity']}
+                            rules={[
+                            {
+                                required: true,
+                                message: 'Missing quantity',
+                            },
+                            ]}
+                        >
+                            <AInput placeholder="Quantity" />
+                        </AForm.Item>
+                        <AForm.Item
+                            {...restField}
+                            initialValue
+                            name={[name, 'buy']}>
+                            <Switch checkedChildren="Buy" unCheckedChildren="Sell" defaultChecked={true}/>
+                        </AForm.Item>
+                        <MinusCircleOutlined onClick={() => remove(name)} />
+                        </ASpace>
+                    ))}
+                    <ASpace align="baseline">
+
+
+                    <AForm.Item>
+                        <AButton type="primary" htmlType="submit">
+                            Execute
+                        </AButton>
+                        </AForm.Item>
+                        <AForm.Item>
+                        <AButton type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                        Add transaction
+                        </AButton>
+                    </AForm.Item>
+                    </ASpace>
+
+                    </>
+                )}
+                </AForm.List>
+
+            </AForm>
         )
     }
 

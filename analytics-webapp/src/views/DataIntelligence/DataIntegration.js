@@ -20,7 +20,9 @@ import { Card, CardHeader, CardBody, CardTitle, Row, Col } from "reactstrap";
 function DataIntegration() {
 
   const [table_names, SetTableNames] = useState([]);
+  const [fermi_table_names, SetFermiTableNames] = useState([]);
   const [selected_tables, SetSelectedTables] = useState([]);
+  const [selected_fermi_tables, SetSelectedFermiTables] = useState([]);
   const [start_date, SetStartDate] = useState("")
   const [end_date, SetEndDate] = useState("")
   const [avail_identifiers, SetAvailIdentifiers] = useState([])
@@ -39,6 +41,7 @@ function DataIntegration() {
   const [alertType, setAlertType] = useState(false);
   const [message, setMessage] = useState(); // alert message
   const [isAlertVisible, setIsAlertVisible] = useState(false);
+  const [Query, SetQuery] = useState("");
   const API_URL    = process.env.REACT_APP_API_URL;
   const JOIN_TYPES = ["LEFT JOIN", "RIGHT JOIN", "INNER JOIN"]
   
@@ -50,7 +53,31 @@ function DataIntegration() {
     .then((responseData) => {
       setIsLoading(false);
       if (responseData["status_code"] < 400) {
-        SetTableNames(responseData["result"])
+        SetTableNames(responseData["content"])
+      }
+      else {
+        setAlertType('danger')
+        setMessage(`Failed. ${responseData['message']}. Detailed message: ${responseData["debug"]}`)
+        setIsAlertVisible(true)
+      }
+
+      // let filterOptions = result.map((option)=> ({"value":option, "label":option}))
+      // SetCDSSpecsList((prevState) => ({
+      //   ...prevState,
+      //   [param]: filterOptions
+      // }))
+      
+    })
+    
+  }
+
+  async function fetch_available_fermi_tables(){
+    setIsLoading(true)
+    fetch(`${API_URL}/data/data_warehouse/fetch_available_fermi_tables`)
+    .then((response) => response.json())
+    .then((responseData) => {
+      if (responseData["status_code"] < 400) {
+        SetFermiTableNames(responseData["content"])
       }
       else {
         setAlertType('danger')
@@ -75,7 +102,7 @@ function DataIntegration() {
     .then((responseData) => {
       setIsLoading(false);
       if (responseData["status_code"] < 400) {
-        SetAvailIdentifiers(responseData["result"])
+        SetAvailIdentifiers(responseData["content"])
       }
       else {
         setAlertType('danger')
@@ -94,6 +121,8 @@ function DataIntegration() {
   }
 
 
+
+
   async function fetch_available_joins(){
     setIsLoading(true)
     fetch(`${API_URL}/data/data_warehouse/fetch_available_joins`)
@@ -101,7 +130,7 @@ function DataIntegration() {
     .then((responseData) => {
       setIsLoading(false);
       if (responseData["status_code"] < 400) {
-        SetAvailJoins(responseData["result"])
+        SetAvailJoins(responseData["content"])
       }
       else {
         setAlertType('danger')
@@ -123,6 +152,7 @@ function DataIntegration() {
     fetch_available_tables()
     fetch_available_identifiers()
     fetch_available_joins()
+    fetch_available_fermi_tables()
   }, [])
 
 
@@ -138,7 +168,7 @@ function DataIntegration() {
     .then((responseData) => {
       setIsLoading(false);
       if (responseData["status_code"] < 400) {
-        SetTableColumns(responseData["result"])
+        SetTableColumns(responseData["content"])
       }
       else {
         setAlertType('danger')
@@ -254,14 +284,24 @@ function DataIntegration() {
     return (
       <div>
       <Form  onSubmit={(e) => {e.preventDefault(); SetData({}); get_integrated_data()}}>
-          {BaseSelector(SetSelectedTables, true, table_names, 'Select tables')}
+          {BaseSelector(SetSelectedTables, true, table_names, 'Select WRDS tables')}
+          {BaseSelector(SetSelectedFermiTables, true, fermi_table_names, 'Select FERMI tables')}
           {BaseSelector(SetIdentifierType, false, avail_identifiers, 'Select asset identifier')}
-          <Label>Set asset identifier value</Label>
-          <Input type="string" value={identifier_value} onChange={(e)=> {SetIdentifierValue(e.target.value)}}/>
-          <Label>Set Start date (YYYY-MM-DD or YYYYQ1-4)</Label>
-          <Input type="string" value={start_date} onChange={(e)=> {SetStartDate(e.target.value)}}/>
+          <Row>
+          <Col md={4}>
+            <Label>Set asset identifier value</Label>
+            <Input type="string" value={identifier_value} onChange={(e)=> {SetIdentifierValue(e.target.value)}}/>
+          </Col>
+          
+          <Col md={4}>
+            <Label>Set Start date (YYYY-MM-DD or YYYYQ1-4)</Label>
+            <Input type="string" value={start_date} onChange={(e)=> {SetStartDate(e.target.value)}}/>
+          </Col>
+          <Col md={4}>
           <Label>Set End date (YYYY-MM-DD or YYYYQ1-4)</Label>
           <Input type="string" value={end_date} onChange={(e)=> {SetEndDate(e.target.value)}}/>
+          </Col>
+          </Row>
           {BaseSelector(SetJoinTypes, true, avail_joins, 'Select join type')}
           {selected_tables.map(table => (
             ColSelector(table, "Choose columns to be selected for table: ", SetSelectedTableCols)
@@ -285,7 +325,11 @@ function DataIntegration() {
         return item.split("--")[0].trim()
       })
     }
-    
+    for (const [key, value] of Object.entries(join_cols)){
+      join_cols[key] = value.map(function (item) {
+      return item.split("--")[0].trim()
+    })
+  }
     const result = fetch(`${API_URL}/data/data_warehouse/get_integrated_data`, {
         method: 'POST',
         headers: {
@@ -305,10 +349,9 @@ function DataIntegration() {
         (responseJSON) => {
           setIsLoading(false);
           if (responseJSON["status_code"] < 400){
-            console.log(responseJSON["result"])
-            SetData(list_to_row_orient(responseJSON["result"])); 
-            SetChartData(responseJSON["result"]);
-            
+            console.log(responseJSON["content"])
+            SetData(list_to_row_orient(responseJSON["content"])); 
+            SetChartData(responseJSON["content"]);
           }
           else{
             SetData(null)
@@ -322,6 +365,53 @@ function DataIntegration() {
       )
   }
 
+
+  async function run_select_query(){
+    const result = fetch(`${API_URL}/data/data_warehouse/run_select_query`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({"content": Query})
+    }).then((response) => response.json()).then(
+      (responseJSON) => {
+        setIsLoading(false);
+        if (responseJSON["status_code"] < 400){
+          SetData(list_to_row_orient(responseJSON["content"])); 
+          SetChartData(responseJSON["content"]);
+          
+        }
+        else{
+          SetData(null)
+          SetChartData(null)
+          setAlertType('danger')
+          //setMessage(`Failed. ${responseJSON['message']}. Detailed message: ${responseJSON["debug"]}`)
+          setMessage(`Failed. ${responseJSON['message']}`)
+          setIsAlertVisible(true)
+        }
+        }
+    )
+  }
+
+  function QueryInput(){
+    return (
+      <Row>
+      <Col md="12">
+          <Card>
+            <CardHeader>
+              <CardTitle>Or enter query manually </CardTitle>
+              <CardSubtitle>Note: Only select privilege is granted for data tables only</CardSubtitle>
+            </CardHeader>
+            <CardBody>
+              <Input type="textarea" name="text" onChange={(e)=>{SetQuery(e.target.value)}}/>
+              <Button>Submit</Button>
+            </CardBody>
+          </Card>
+      </Col>
+    </Row>
+    )
+  }
+
   function DataChart(){
     if (chart_data != null && chart_data != undefined ) {
       if (chart_data.length >0 || Object.keys(chart_data).length > 0){
@@ -329,6 +419,10 @@ function DataIntegration() {
           <Row>
             <Col md="12">
                 <Card>
+                <CardHeader>
+              <CardTitle tag='h5'>Visualization</CardTitle>  
+              
+            </CardHeader>
                   <CardBody>
                     <MyChart chartdata={chart_data_parser(chart_data)} />
                   </CardBody>
@@ -398,15 +492,32 @@ function DataIntegration() {
       <Row>
         <Col md="12">
           <Card>
-            <CardHeader>Fetch data</CardHeader>
+            <CardHeader>
+              <CardTitle tag='h5'>Query helper</CardTitle>
+              </CardHeader>
             <CardBody>
               {InputForm()}
-              {DataTable()}
-              {DataChart()}
             </CardBody>
           </Card>
         </Col>
       </Row>
+      {QueryInput()}
+      <Row>
+        <Col md="12">
+          <Card>
+            <CardHeader>
+              <CardTitle tag='h5'>Data table</CardTitle>  
+              
+            </CardHeader>
+            <CardBody>
+              {DataTable()}
+            </CardBody>
+          </Card>
+        </Col>
+      </Row>
+      
+      
+      {DataChart()}
       
     </div>
     </LoadingOverlay>

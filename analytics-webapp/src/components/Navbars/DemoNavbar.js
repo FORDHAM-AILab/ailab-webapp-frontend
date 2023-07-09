@@ -42,6 +42,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { users } from "reducers/cache_user";
 import { saveUser, clearUser, setToken, clearToken } from "reducers/cache_user";
 import Cookies from 'js-cookie'
+import { Avatar, Space } from 'antd';
+import { UserOutlined } from '@ant-design/icons';
 
 
 //const UserInfoContext = React.createContext();
@@ -142,7 +144,7 @@ function Header(props) {
   }
 
   const checkUserSessionStatus = (cur_access_token) => {
-
+    console.log((access_token === null)? cur_access_token: access_token);
     const request = {
       method: 'GET',
       credentials: 'include',
@@ -259,6 +261,13 @@ function Header(props) {
       </div>
     )
   }
+
+  const UserAvatar = () => {
+
+    return (((user !== null) && (user !== undefined))
+        ?<Avatar src={user.picture} alt="avatar" />: <Avatar icon={<UserOutlined />} />)
+  }
+
   return (
     // add or remove classes depending if we are on full-screen-maps page or not
     // <UserInfoContext.Provider value={userInfo}>
@@ -359,9 +368,10 @@ function Header(props) {
               toggle={(e) => dropdownToggle(e)}
             >
               <DropdownToggle caret={false} nav>
-                <i className="nc-icon nc-circle-10" />
+                {UserAvatar()}
               </DropdownToggle>
               {(user !== null) && (user !== undefined)?
+              
                 <DropdownMenu right>
                   <DropdownItem tag="a"><Link to={{pathname: '/admin/user', state: user}}>User Profile</Link> </DropdownItem>
                   <DropdownItem tag="a" onClick={logout}>Logout</DropdownItem>

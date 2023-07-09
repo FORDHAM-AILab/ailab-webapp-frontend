@@ -37,9 +37,12 @@ function OptionsAnalysis() {
 
   function OptionsDataForm () {
     function ExpirationList () {
-      return expiration_list.map((value, index) => {
-        return <option>{value}</option>
-      })
+      if (expiration_list !== undefined && expiration_list !== null){
+        return expiration_list.map((value, index) => {
+          return <option>{value}</option>
+        })
+      }
+
     }
     return (
       <div>
@@ -186,7 +189,7 @@ function OptionsAnalysis() {
     let request_url = `${API_URL}/options/get_options_expiration_date/${ticker}`;
     const response = await fetch(request_url);
     const data = await response.json();
-    const result = data["result"]
+    const result = data["content"]
     SetExpirationList(result)
     SetExpirationDate(result[0])
   }
@@ -207,7 +210,7 @@ function OptionsAnalysis() {
     })
     SetOptionData()
     const data = await response.json();
-    const result = JSON.parse(data["result"]) 
+    const result = JSON.parse(data["content"]) 
     SetOptionData(result)
   }
 
@@ -224,7 +227,7 @@ function OptionsAnalysis() {
     })
     SetOptionsPrice()
     const data = await response.json();
-    const result = JSON.parse(data["result"]) 
+    const result = JSON.parse(data["content"]) 
     console.log(result)
     SetOptionsPrice(result)
   }

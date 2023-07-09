@@ -49,7 +49,7 @@ function User() {
   var access_token = useSelector(state => state.users.access_token)
   const dispatch = useDispatch()
   React.useEffect(() => {
-    if (user['internal_sub_id'] === undefined){
+    if (user === null || user === undefined || user['internal_sub_id'] === undefined){
       window.location = '/admin/home'
     }
     setUserProfile(user)
@@ -123,7 +123,7 @@ function ShowUser(){
                     <img
                       alt="..."
                       className="avatar border-gray"
-                      src={require("assets/img/Enrico-Fermi-Italian-problem-physics-1950.jpeg").default}
+                      src="https://lh3.googleusercontent.com/a/AGNmyxYypUmZCR6TQcPYASAggSIYhfp0OR1rTGLQGGXr=s96-c"
                     />
                     <h5 className="title">{user != null? user['username']: "Not logged in"}</h5>
                   </a>

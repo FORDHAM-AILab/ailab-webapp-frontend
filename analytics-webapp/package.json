@@ -5,10 +5,13 @@
   "dependencies": {
     "@babel/core": "7.14.2",
     "@reduxjs/toolkit": "^1.8.2",
+    "@types/node": "^20.2.1",
+    "@types/react": "^18.2.6",
+    "@types/react-dom": "^18.2.4",
+    "@types/websocket": "^1.0.5",
+    "antd": "^5.4.7",
     "bootstrap": "4.6.0",
     "chart.js": "2.5",
-    "chartjs-plugin-colorschemes": "^0.4.0",
-    "chartjs-plugin-streaming": "^2.0.0",
     "jquery": "3.6.0",
     "js-cookie": "^3.0.1",
     "node-sass": "6.0.0",
@@ -56,9 +59,11 @@
     "not op_mini all"
   ],
   "optionalDependencies": {
-    "typescript": "4.2.4"
+    "typescript": "^4.2.4"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@types/react-router-dom": "^5.3.3",
     "env-cmd": "^10.1.0",
     "gulp": "4.0.2",
     "gulp-append-prepend": "1.0.9",
